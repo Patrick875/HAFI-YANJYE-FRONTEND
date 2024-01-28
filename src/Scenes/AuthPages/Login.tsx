@@ -3,15 +3,47 @@ import loginArt from "../../assets/images/loginArt2.svg";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { HashLoader } from "react-spinners";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthTitle from "./AuthTitle";
+import { GoogleLogin } from "@react-oauth/google";
 import { error } from "../../shared/types";
+import instance from "../../API";
+import { login } from "../../Redux/authSlice";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
-	const { register } = useForm();
-	const [success, setSuccess] = useState<boolean>(false);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { register, handleSubmit } = useForm();
 	const [error, setError] = useState<error | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
+	const responseMessage = (response) => {
+		console.log(response);
+	};
+	const errorMessage = (error) => {
+		console.log(error);
+	};
+	const handleOnFocus = () => {
+		setError(null);
+	};
+	const loginUser = async (data) => {
+		setLoading(true);
+		await instance
+			.post("/auth/login", { ...data })
+			.then((res) => {
+				console.log("res", res);
+
+				dispatch(login(res.data.data.user));
+				navigate("/admin");
+			})
+			.catch((err) => {
+				console.log("err", err);
+				setError({ status: true, message: "error loging in" });
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	};
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: -50, transition: { duration: 0.5 } }}
@@ -22,17 +54,19 @@ const Login = () => {
 				<img src={loginArt} alt="computer login" className="block w-40 h-40" />
 			</div>
 
-			<form className="w-4/5 mx-auto ">
+			<form className="w-4/5 mx-auto " onSubmit={handleSubmit(loginUser)}>
 				<input
 					className="w-full px-3 py-1 my-1 font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900"
 					type="text"
-					placeholder="Email/Username"
-					{...register("username")}
+					onFocus={handleOnFocus}
+					placeholder="Email"
+					{...register("email")}
 				/>
 				<input
 					className="w-full px-3 py-1 my-1 font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900"
 					type="password"
 					placeholder="Password"
+					onFocus={handleOnFocus}
 					{...register("password")}
 				/>
 				<button
@@ -55,6 +89,7 @@ const Login = () => {
 					<Link to="/reset-password">Reset password</Link>
 				</span>
 			</p>
+			<p className="text-xs font-bold text-center">or</p>
 			<Link
 				to="register"
 				className="block my-2 font-bold text-center text-primary-violet">
@@ -67,6 +102,8 @@ const Login = () => {
 					</p>
 				</div>
 			)}
+			<hr />
+			<GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
 		</motion.div>
 	);
 };

@@ -8,6 +8,9 @@ export default {
 				"primary-sky": "#407FBF",
 				"primary-violet": "#3D348B",
 				"theme-yellow": "#FEA509",
+				"primary-backg": "#F3F7F9",
+				"sidebar-bg": "#F7F7F7",
+				"tab-hover": "#FEBB95",
 			},
 			fontFamily: {
 				nunito: ["Nunito"],
