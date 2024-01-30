@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 import { motion } from "framer-motion";
 import AuthTitle from "./AuthTitle";
-import { error } from "../../shared/types";
 import instance from "../../API";
+import toast from "react-hot-toast";
 
 const Signup = () => {
 	const { register, handleSubmit, watch, reset } = useForm();
 	const password = watch("password") || "";
-	const confirmPassword = watch("comfirmPassword") || "";
+	const confirmPassword = watch("confirmPassword") || "";
 	const [success, setSuccess] = useState<boolean | null>(false);
 	const [error, setError] = useState<boolean | null>(null);
 	const [message, setMessage] = useState<string[]>([]);
@@ -28,11 +28,17 @@ const Signup = () => {
 			.post("/auth/register", { ...data })
 			.then((res) => {
 				setSuccess(true);
+				toast.success("User signup success");
 			})
 			.catch((err) => {
 				console.log(err);
-				setError(true);
-				setMessage(err.response.data.message);
+				if (err.response.data.statusCode !== 500) {
+					setError(true);
+					setMessage(err.response.data.message);
+				} else {
+					setError(true);
+					setMessage(["Internal Server Error"]);
+				}
 			})
 			.finally(() => {
 				setLoading(false);
@@ -63,6 +69,7 @@ const Signup = () => {
 					{...register("telphone")}
 					onFocus={handleOnFocus}
 				/>
+
 				<input
 					className="w-full px-3 py-1 my-3 font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900"
 					type="email"
@@ -81,9 +88,10 @@ const Signup = () => {
 					className="w-full px-3 py-1 my-3 font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900"
 					type="password"
 					placeholder="Confirm Password"
-					{...register("comfirmPassword")}
+					{...register("confirmPassword")}
 					onFocus={handleOnFocus}
 				/>
+
 				<button
 					type="submit"
 					disabled={loading || confirmPassword !== password}
@@ -104,11 +112,7 @@ const Signup = () => {
 					Login
 				</Link>
 			</form>
-			{success && (
-				<p className="w-full py-4 font-bold text-center text-teal-900 bg-teal-100">
-					User signup success
-				</p>
-			)}
+
 			{password != confirmPassword && (
 				<p className="w-full text-xs text-center text-pink-900">
 					Passwords don't match
@@ -127,3 +131,15 @@ const Signup = () => {
 };
 
 export default Signup;
+
+// <select
+// 	{...register("role")}
+// 	className="w-full px-3 py-1 my-3 text-xs font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900">
+// 	<option value="" className="text-xs">
+// 		Select role
+// 	</option>
+// 	<option value="ADMIN">ADMIN</option>
+// 	<option value="AGENT">AGENT</option>
+// 	<option value="AGENT">DRIVER</option>
+// 	<option value="CUSTOMER">CUSTOMER</option>
+// </select>;

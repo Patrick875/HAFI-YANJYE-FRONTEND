@@ -12,9 +12,8 @@ export const PrivateRoutes = ({
 	element,
 }: privateRoutesProps) => {
 	const user = useSelector(getUser);
-	console.log("user", user);
 	const token = localStorage.getItem("token");
-	if (!user && !token) {
+	if (!user || !token) {
 		return <Navigate to="/" />;
 	} else {
 		<Navigate to={`/admin`} />;

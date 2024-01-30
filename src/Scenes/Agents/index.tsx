@@ -1,5 +1,11 @@
+import { Outlet } from "react-router-dom";
+
 const Agents = () => {
-	return <div>Agents</div>;
+	return (
+		<div>
+			<Outlet />
+		</div>
+	);
 };
 
 export default Agents;

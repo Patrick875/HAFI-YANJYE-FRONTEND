@@ -4,12 +4,27 @@ import { motion } from "framer-motion";
 import AuthTitle from "./AuthTitle";
 import { HashLoader } from "react-spinners";
 import { useState } from "react";
-import { error } from "../../shared/types";
+import instance from "../../API";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const ResetPassword = () => {
-	const [success, setSuccess] = useState<boolean>(false);
-	const [error, setError] = useState<error | null>(null);
+	const { register, handleSubmit } = useForm();
 	const [loading, setLoading] = useState<boolean>(false);
+	const resetPassword = async (data) => {
+		setLoading(true);
+		await instance
+			.post("/resetpassword", data)
+			.then(() => {
+				toast.success(res.response.data.message);
+			})
+			.catch((err) => {
+				toast.error(err.response.data.message[0]);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	};
 	return (
 		<motion.div
 			className="basis-5/6"
@@ -20,10 +35,11 @@ const ResetPassword = () => {
 				<img src={Lock} alt="computer login" className="block w-40 h-40" />
 			</div>
 
-			<form className="w-4/5 mx-auto ">
+			<form onSubmit={handleSubmit(resetPassword)} className="w-4/5 mx-auto ">
 				<input
 					className="w-full px-3 py-1 my-1 font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900"
 					type="text"
+					{...register("email")}
 					placeholder="Email"
 				/>
 

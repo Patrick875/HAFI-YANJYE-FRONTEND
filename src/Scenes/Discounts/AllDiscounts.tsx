@@ -20,7 +20,10 @@ function AllDiscounts() {
 				</form>
 				<CreateButton text="Add New" />
 			</div>
-			<div>All Discounts dummy </div>
+			<div>
+				
+				
+			</div>
 		</div>
 	);
 }

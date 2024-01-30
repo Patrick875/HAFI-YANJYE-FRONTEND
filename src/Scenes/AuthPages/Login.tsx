@@ -31,8 +31,6 @@ const Login = () => {
 		await instance
 			.post("/auth/login", { ...data })
 			.then((res) => {
-				console.log("res", res);
-
 				dispatch(login(res.data.data.user));
 				navigate("/admin");
 			})

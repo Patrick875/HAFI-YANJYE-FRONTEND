@@ -31,11 +31,22 @@ import CreateCoupon from "./Scenes/Discounts/CreateCoupon";
 import CouponDetails from "./Scenes/Discounts/CouponDetails";
 import AllOrders from "./Scenes/Orders/AllOrders";
 import ViewOrder from "./Scenes/Orders/ViewOrder";
+import { Toaster } from "react-hot-toast";
+import "react-datepicker/dist/react-datepicker.css";
+import AllAgents from "./Scenes/Agents/AllAgents";
+import RegisterAgent from "./Scenes/Agents/RegisterAgent";
+import AgentDetails from "./Scenes/Agents/AgentDetails";
+import AllSuppliers from "./Scenes/Suppliers/AllSuppliers";
+import RegisterSupplier from "./Scenes/Suppliers/RegisterSupplier";
+import SupplierDetails from "./Scenes/Suppliers/SupplierDetails";
+import Order from "./Scenes/Orders/Order";
+import ProcessOrder from "./Scenes/Orders/ProcessOrder";
 
 function App() {
 	return (
 		<>
 			<AnimatePresence>
+				<Toaster position="top-center" toastOptions={{ duration: 5000 }} />
 				<Routes>
 					<Route path="/" element={<AuthLayout />}>
 						<Route index element={<Login />} />
@@ -57,7 +68,10 @@ function App() {
 						</Route>
 						<Route path="orders" element={<Orders />}>
 							<Route index element={<AllOrders />} />
-							<Route path=":orderID" element={<ViewOrder />} />
+							<Route path=":orderId" element={<Order />}>
+								<Route index element={<ViewOrder />} />
+								<Route path="process" element={<ProcessOrder />} />
+							</Route>
 						</Route>
 						<Route path="discounts" element={<DiscCoupLayout />}>
 							<Route index element={<AllDiscounts />} />
@@ -68,8 +82,16 @@ function App() {
 								<Route path=":id" element={<CouponDetails />} />
 							</Route>
 						</Route>
-						<Route path="agents" element={<Agents />} />
-						<Route path="suppliers" element={<Suppliers />} />
+						<Route path="agents" element={<Agents />}>
+							<Route index element={<AllAgents />} />
+							<Route path="create" element={<RegisterAgent />} />
+							<Route path=":agentId" element={<AgentDetails />} />
+						</Route>
+						<Route path="suppliers" element={<Suppliers />}>
+							<Route index element={<AllSuppliers />} />
+							<Route path="create" element={<RegisterSupplier />} />
+							<Route path=":supplierId" element={<SupplierDetails />} />
+						</Route>
 						<Route path="locations" element={<Locations />} />
 						<Route path="analytics" element={<Analytics />} />
 					</Route>
