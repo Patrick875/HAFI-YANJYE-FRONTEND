@@ -5,13 +5,14 @@ type Props = {};
 function DiscCoupLayout({}: Props) {
 	const { pathname } = useLocation();
 	const paths = pathname.split("/");
+	console.log("paths", paths);
 
 	return (
 		<div>
 			<div className="flex justify-between w-1/3 my-3">
 				<Link
 					className={`text-xs font-bold pb-2 ${
-						paths.length == 3 && paths[2] === "discounts"
+						paths[3] !== "coupons" && paths[2] === "discounts"
 							? "border-b-2 border-b-sky-900"
 							: " "
 					}`}

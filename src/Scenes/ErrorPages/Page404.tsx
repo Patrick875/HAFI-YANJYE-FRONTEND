@@ -9,7 +9,7 @@ const Page404 = () => {
 				<p className="my-8 text-xl text-center">Page not found !</p>
 				<button
 					onClick={() => {
-						navigate(-1);
+						navigate("/");
 					}}
 					className="w-full py-2 text-xs border-1 border-slate-500 bg-slate-100">
 					Return{" "}

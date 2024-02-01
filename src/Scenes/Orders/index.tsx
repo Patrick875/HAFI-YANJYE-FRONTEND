@@ -1,9 +1,11 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useOutletContext } from "react-router-dom";
 
 function Orders() {
+	const { userRole } = useOutletContext();
+
 	return (
 		<div>
-			<Outlet />
+			<Outlet context={{ userRole }} />
 		</div>
 	);
 }

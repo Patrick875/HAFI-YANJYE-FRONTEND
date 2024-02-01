@@ -72,6 +72,8 @@ function AllProducts() {
 	const [itemsPerPage, setItemsPerPage] = useState<number>(10);
 	const pagesVisited = pageNumber ? pageNumber * itemsPerPage : 0;
 
+	console.log("this is products", products);
+
 	const displayItems =
 		products && query === "" && (!categories || category === "")
 			? products

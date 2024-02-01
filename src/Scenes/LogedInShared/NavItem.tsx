@@ -22,7 +22,7 @@ export const NavItem = ({
 			to={link}
 			className={({ isActive }) =>
 				`flex text-sm items-center gap-3 p-2 capitalize font-medium ${
-					isActive && location === url[url.length - 1]
+					isActive && location === url[2]
 						? `text-white bg-${defaultColor} rounded-tr-[6px] rounded-bl-[6px]`
 						: "  hover:bg-tab-hover duration-300 ease-in-out delay-50"
 				} `

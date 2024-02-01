@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { error } from "../shared/types";
 import instance from "../API";
+import toast from "react-hot-toast";
 
 const usePostData = () => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -11,10 +12,18 @@ const usePostData = () => {
 			.post(`${url}`, data)
 			.then((res) => {
 				console.log("res", res);
+				toast.success("Success !!!");
 			})
 			.catch((err) => {
-				console.log("err", err);
+				console.log("this is the error", err);
+
 				setError({ status: true, message: "error !!!" });
+				const errorConstant = err.response.data.message;
+				if (Array.isArray(errorConstant)) {
+					toast.error(errorConstant[0]);
+				} else {
+					toast.error(errorConstant);
+				}
 			})
 			.finally(() => {
 				setIsLoading(false);

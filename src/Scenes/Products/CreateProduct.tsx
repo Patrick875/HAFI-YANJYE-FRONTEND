@@ -38,13 +38,18 @@ function CreateProduct() {
 			name: `image${i}`,
 			link: img.data,
 		}));
+		delete formData.image;
+		delete formData.size;
+		delete formData.videoLink;
+		delete formData.datasheetLink;
+		delete formData.color;
 		const submitData = {
 			...formData,
-			image: null,
+
 			images: submitImages,
 			categoryId: Number(formData.categoryId),
 			price: Number(formData.price),
-			size: null,
+
 			cost: Number(formData.cost),
 			quatity: Number(formData.quatity),
 		};
@@ -269,7 +274,7 @@ function CreateProduct() {
 									!loading ? "text-white bg-teal-900" : "bg-teal-100"
 								} rounded-[4px] `}>
 								{!loading ? (
-									<p className="flex gap-3 items-center">
+									<p className="flex items-center gap-3">
 										Submit <GoCheck />
 									</p>
 								) : (
