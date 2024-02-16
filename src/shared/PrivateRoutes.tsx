@@ -7,13 +7,11 @@ interface privateRoutesProps {
 	allowedPositions?: string[];
 	element: ReactElement;
 }
-export const PrivateRoutes = ({
-	allowedPositions,
-	element,
-}: privateRoutesProps) => {
+export const PrivateRoutes = ({ element }: privateRoutesProps) => {
 	const user = useSelector(getUser);
+	const localHostUser = localStorage.getItem("user");
 	const token = localStorage.getItem("token");
-	if (!user || !token) {
+	if (!user && !token && !localHostUser) {
 		return <Navigate to="/" />;
 	} else {
 		<Navigate to={`/admin`} />;

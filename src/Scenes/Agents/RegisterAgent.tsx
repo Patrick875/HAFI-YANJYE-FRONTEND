@@ -2,11 +2,12 @@ import { useForm } from "react-hook-form";
 import { HashLoader } from "react-spinners";
 import usePostData from "../../Hooks/usePostData";
 import BackButton from "../../shared/BackButton";
+import { agent } from "../../shared/types";
 
-function RegisterAgent({}: Props) {
-	const { register, handleSubmit, reset } = useForm();
+function RegisterAgent() {
+	const { register, handleSubmit, reset } = useForm<agent>();
 	const { postData, isLoading } = usePostData();
-	const registerAgent = async (data) => {
+	const registerAgent = async (data: agent) => {
 		data.role = "AGENT";
 		await postData("/users", data);
 		reset();

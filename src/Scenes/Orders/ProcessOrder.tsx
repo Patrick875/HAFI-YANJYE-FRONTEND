@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import BackButton from "../../shared/BackButton";
 import {
 	MdOutlineCheckBox,
@@ -6,15 +6,18 @@ import {
 } from "react-icons/md";
 import { useMemo, useState } from "react";
 import useFetchData from "../../Hooks/useFetchData";
-import { agent, identityPerson } from "../../shared/types";
+import { OrderItem, agent, identityPerson } from "../../shared/types";
+import instance from "../../API";
 
 interface orderAssign {
-	agent: number;
+	agentId: number;
 	items: number[];
 }
 
 function ProcessOrder() {
-	const { role, order } = useOutletContext();
+	const { orderId } = useParams();
+	const { data: order } = useFetchData(`/orders/${orderId}`);
+
 	const [selectedItems, setSelectedItems] = useState<number[]>([]);
 	const [selectedAgent, setSelectedAgent] = useState<identityPerson | null>(
 		null
@@ -24,14 +27,14 @@ function ProcessOrder() {
 	const handleSelectAll = () => {
 		setSelectAll(true);
 		const orderDetailIds: number[] = order.orderDetails.map(
-			(detail) => detail.id
+			(detail: OrderItem) => detail.id
 		);
 		setSelectedItems((prev) => [...prev, ...orderDetailIds]);
 		if (selectedAgent !== null) {
 			if (targettedAssign) {
 				setAssignedAgents((prev) =>
 					prev.map((el) =>
-						el.agent === targettedAssign.agent
+						el.agentId === targettedAssign.agentId
 							? { ...el, items: orderDetailIds }
 							: el
 					)
@@ -39,7 +42,7 @@ function ProcessOrder() {
 			} else {
 				setAssignedAgents((prev) => [
 					...prev,
-					{ agent: selectedAgent.id, items: orderDetailIds },
+					{ agentId: selectedAgent.id, items: orderDetailIds },
 				]);
 			}
 		}
@@ -49,31 +52,31 @@ function ProcessOrder() {
 		if (selectedItems.includes(id) && selectedAgent) {
 			setSelectedItems((prev) => prev.filter((el) => el !== id));
 			const agent = assignedAgents.filter(
-				(el) => el.agent === selectedAgent.id
+				(el) => el.agentId === selectedAgent.id
 			)[0];
 			const newItems = agent.items.filter((el) => el !== id);
 			const newAssigns = assignedAgents.map((el) =>
-				el.agent === selectedAgent.id ? { ...el, items: newItems } : el
+				el.agentId === selectedAgent.id ? { ...el, items: newItems } : el
 			);
-			setAssignedAgents((prev) => newAssigns);
+			setAssignedAgents(() => newAssigns);
 		} else {
 			setSelectedItems((prev) => [...prev, id]);
 			if (selectedAgent !== null) {
 				if (
 					assignedAgents.length !== 0 &&
-					assignedAgents.some((el) => el.agent == selectedAgent.id)
+					assignedAgents.some((el) => el.agentId == selectedAgent.id)
 				) {
 					if (!targettedAssign) {
 						const newAssigned = assignedAgents.map((el) =>
-							el.agent === selectedAgent.id && !el.items.includes(id)
+							el.agentId === selectedAgent.id && !el.items.includes(id)
 								? { ...el, items: [...el.items, id] }
 								: el
 						);
-						setAssignedAgents((prev) => [...newAssigned]);
+						setAssignedAgents(() => [...newAssigned]);
 					} else {
 						setAssignedAgents((prev) =>
 							prev.map((el) =>
-								el.agent === targettedAssign.agent
+								el.agentId === targettedAssign.agentId
 									? { ...el, items: [...targettedAssign.items, id] }
 									: el
 							)
@@ -82,7 +85,7 @@ function ProcessOrder() {
 				} else {
 					setAssignedAgents((prev) => [
 						...prev,
-						{ agent: selectedAgent.id, items: [id] },
+						{ agentId: selectedAgent.id, items: [id] },
 					]);
 				}
 			}
@@ -94,7 +97,7 @@ function ProcessOrder() {
 			setSelectAll(false);
 			setAssignedAgents((prev) =>
 				prev.map((el) =>
-					el.agent === targettedAssign?.agent ? { ...el, items: [] } : el
+					el.agentId === targettedAssign?.agentId ? { ...el, items: [] } : el
 				)
 			);
 		} else {
@@ -112,7 +115,7 @@ function ProcessOrder() {
 	const targettedAssign = useMemo(() => {
 		if (selectedAgent && assignedAgents.length !== 0) {
 			const assign = assignedAgents.filter(
-				(el) => el.agent === selectedAgent.id
+				(el) => el.agentId === selectedAgent.id
 			)[0];
 			return assign;
 		}
@@ -123,20 +126,22 @@ function ProcessOrder() {
 		const modifiedAssigned =
 			assignedAgents &&
 			assignedAgents.map((el) => ({
-				agent: agents && agents.filter((ag) => ag.id == el.agent)[0].fullName,
+				agent:
+					agents &&
+					agents.filter((ag: agent) => ag.id == el.agentId)[0].fullName,
 				items:
 					order &&
 					order.orderDetails
-						.filter((det) => el.items.includes(det.id))
-						.map((el) => el.product.name),
+						.filter((det: OrderItem) => el.items.includes(det.id))
+						.map((el: OrderItem) => el.product.name),
 			}));
 
 		return (
-			<div className="bg-white p-2 mt-3">
-				<p className="text-xs font-bold mb-2">Summary</p>
-				<div className="w-full grid grid-cols-2">
-					<p className="font-bold text-xs py-2">Agent</p>
-					<p className="font-bold text-xs py-2">Items</p>
+			<div className="p-2 mt-3 bg-white">
+				<p className="mb-2 text-xs font-bold">Summary</p>
+				<div className="grid w-full grid-cols-2">
+					<p className="py-2 text-xs font-bold">Agent</p>
+					<p className="py-2 text-xs font-bold">Items</p>
 				</div>
 				<div>
 					{modifiedAssigned &&
@@ -145,8 +150,8 @@ function ProcessOrder() {
 								<div className="grid grid-cols-2 text-xs" key={el.agent}>
 									<p>{el.agent}</p>
 									<div>
-										{el.items.map((item) => (
-											<p key={item}>{item}</p>
+										{el.items.map((item: string) => (
+											<p key={crypto.randomUUID()}>{item}</p>
 										))}
 									</div>
 								</div>
@@ -162,8 +167,18 @@ function ProcessOrder() {
 		setSelectedAgent(null);
 	};
 
-	console.log("order", order);
-	console.log("agents-assign", assignedAgents);
+	const assignAgents = async () => {
+		console.log("assignment", assignedAgents);
+
+		await instance
+			.post("/orders/assign/agent", assignedAgents)
+			.then((res) => {
+				console.log("res", res);
+			})
+			.catch((err) => {
+				console.log("errr", err);
+			});
+	};
 
 	return (
 		<div>
@@ -229,12 +244,12 @@ function ProcessOrder() {
 							</div>
 							<div className="my-1 bg-white rounded-[4px] p-2">
 								{order.orderDetails &&
-									order.orderDetails.map((det) => (
+									order.orderDetails.map((det: OrderItem) => (
 										<div
 											onClick={() => {
 												toggleSelectItem(det.id);
 											}}
-											key={det.id}
+											key={crypto.randomUUID()}
 											className="grid items-center grid-cols-3 py-2 cursor-pointer hover:bg-slate-200 ">
 											<div className="flex items-center gap-2">
 												{selectedAgent && targettedAssign ? (
@@ -277,7 +292,9 @@ function ProcessOrder() {
 										))}
 							</div>
 							<Summary />
-							<button className="w-full rounded-[4px] py-2 bg-teal-800 my-2 text-white text-xs font-bold">
+							<button
+								onClick={assignAgents}
+								className="w-full rounded-[4px] py-2 bg-teal-800 my-2 text-white text-xs font-bold">
 								Assign order{" "}
 							</button>
 							<button

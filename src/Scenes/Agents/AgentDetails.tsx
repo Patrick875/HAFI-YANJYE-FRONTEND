@@ -3,12 +3,12 @@ import useFetchData from "../../Hooks/useFetchData";
 import { useForm } from "react-hook-form";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import BackButton from "../../shared/BackButton";
+import { OrderItem, order } from "../../shared/types";
 
 function AgentDetails() {
 	const { agentId } = useParams();
 	const { data: agent, loading } = useFetchData(`users/${agentId}`);
 	const { register } = useForm();
-	console.log("log", agent);
 
 	return (
 		<div>
@@ -110,7 +110,7 @@ function AgentDetails() {
 							</form>
 						</div>
 						{agent.orders ? (
-							agent.orders.map((el) => (
+							agent.orders.map((el: order) => (
 								<div
 									key={el.id}
 									className="mt-3 px-4 py-4 rounded-[6px] border-[1.5px] border-gray-400">
@@ -122,7 +122,9 @@ function AgentDetails() {
 									<div className="mt-1">
 										<p className="py-1 text-xs font-bold">
 											Customer:{" "}
-											<span className="font-normal">{el.customer}</span>{" "}
+											<span className="font-normal">
+												{el.customer.fullName}
+											</span>{" "}
 										</p>
 										<p className="py-1 text-xs font-bold">
 											Location: <span className="font-normal">Location</span>{" "}
@@ -131,11 +133,12 @@ function AgentDetails() {
 									<div className="mt-2">
 										<p className="text-xs font-bold">Items</p>
 										<div className="flex gap-2">
-											{el.orderDetails.map((prod) => (
-												<p key={prod.id} className="text-xs">
-													{prod.product.name}
-												</p>
-											))}
+											{el.orderDetails &&
+												el.orderDetails.map((prod: OrderItem) => (
+													<p key={prod.id} className="text-xs">
+														{prod.product.name}
+													</p>
+												))}
 										</div>
 									</div>
 								</div>

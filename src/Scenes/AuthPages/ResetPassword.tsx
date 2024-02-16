@@ -8,15 +8,18 @@ import instance from "../../API";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
+interface resetPasswordType {
+	email: string;
+}
 const ResetPassword = () => {
-	const { register, handleSubmit } = useForm();
+	const { register, handleSubmit } = useForm<resetPasswordType>();
 	const [loading, setLoading] = useState<boolean>(false);
-	const resetPassword = async (data) => {
+	const resetPassword = async (data: resetPasswordType) => {
 		setLoading(true);
 		await instance
 			.post("/resetpassword", data)
-			.then(() => {
-				toast.success(res.response.data.message);
+			.then((res) => {
+				toast.success(res.data.message);
 			})
 			.catch((err) => {
 				toast.error(err.response.data.message[0]);
@@ -28,8 +31,9 @@ const ResetPassword = () => {
 	return (
 		<motion.div
 			className="basis-5/6"
-			initial={{ opacity: 0, x: -50, transition: { duration: 0.5 } }}
-			animate={{ opacity: 1, x: 0, transition: { duration: 0.8 } }}>
+			initial={{ opacity: 0, x: -50 }}
+			transition={{ duration: 0.5 }}
+			animate={{ opacity: 1, x: 0 }}>
 			<AuthTitle />
 			<div className="flex justify-center">
 				<img src={Lock} alt="computer login" className="block w-40 h-40" />

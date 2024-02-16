@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectProduct } from "../../Redux/productsSlice";
 import { getSelectedProduct } from "../../store";
 import EditProduct from "./EditProduct";
+import { category, product } from "../../shared/types";
 
 interface itemprops {
 	el: product;
@@ -29,7 +30,10 @@ const Item = ({ el }: itemprops) => {
 					: " "
 			} hover:cursor-pointer transition duration-150 ease-out my-2 text-xs p-4 flex md:flex-row  gap-2 flex-col items-center md:items-stretch  md:justify-between bg-white w-full rounded-[8px]`}>
 			<div className="flex flex-1 gap-2 md:block ">
-				<img src={el?.images[0].link} className="block object-contain " />
+				{/* <img
+					src={el?.images && el.images.length !== 0 && el.images[0].link}
+					className="block object-contain "
+				/> */}
 			</div>
 			<div className="flex flex-1 gap-2 md:block ">
 				<p className="font-medium ">Product Name</p>
@@ -69,10 +73,9 @@ function AllProducts() {
 	const { data: categories, loading } = useFetchData("/categories");
 	const { data: products } = useFetchData("/products");
 	const [pageNumber, setPageNumber] = useState<number | null>(0);
-	const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+	// const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+	const itemsPerPage = 10;
 	const pagesVisited = pageNumber ? pageNumber * itemsPerPage : 0;
-
-	console.log("this is products", products);
 
 	const displayItems =
 		products && query === "" && (!categories || category === "")
@@ -83,7 +86,7 @@ function AllProducts() {
 					})
 			: categories && products && query === "" && category !== ""
 			? products
-					.filter((el) => el.category.id == category)
+					.filter((el: product) => el.category.id == Number(category))
 					.slice(pagesVisited, pagesVisited + itemsPerPage)
 					.map((el: product) => {
 						return <Item el={el} key={el.id} />;
@@ -113,17 +116,17 @@ function AllProducts() {
 			return Math.ceil(searchResults.length / itemsPerPage);
 		} else if (categories && category !== "" && searchResults.length === 0) {
 			return Math.ceil(
-				categories.filter((cat) => cat.id == category)[0].products.length /
-					itemsPerPage
+				categories.filter((cat: category) => cat.id === Number(category))[0]
+					.products.length / itemsPerPage
 			);
 		} else {
 			return null;
 		}
 	};
 
-	const pages: number | null = pageCount();
+	const pages: number | null = useMemo(() => pageCount(), [category]);
 
-	const changePage = ({ selected }) => {
+	const changePage = ({ selected }: { selected: number }) => {
 		setPageNumber(selected);
 	};
 	const paginationComStyles: string =
@@ -132,9 +135,11 @@ function AllProducts() {
 		paginationComStyles +
 		"text-purple-900 hover:text-white hover:bg-purple-900 ";
 
+	console.log("all-products-and-stuff", products);
+
 	useEffect(() => {
 		setPageNumber(0);
-	}, [watch("category")]);
+	}, [category]);
 
 	return (
 		<div>
@@ -167,10 +172,10 @@ function AllProducts() {
 										Select category
 									</option>
 									{categories &&
-										categories.map((cat) => (
+										categories.map((cat: category) => (
 											<option
 												className="capitalize"
-												selected={cat.id == category}
+												selected={cat.id == Number(category)}
 												key={crypto.randomUUID()}
 												value={cat.id}>
 												{cat.name}
@@ -205,13 +210,14 @@ function AllProducts() {
 								nextLabel="Next"
 								activeLinkClassName="text-white bg-purple-900"
 								nextLinkClassName={`${pagNextPrevStyles}`}
-								pageCount={pages}
+								pageCount={pages ? pages : 1}
 								pageLinkClassName={`${paginationComStyles}`}
 								onPageChange={changePage}
 								containerClassName="rounded-sm p-3 bg-white flex gap-3 items-center "
 							/>
 						)}
 					</div>
+					{selectedProduct && selectedProduct.name}
 				</div>
 				{selectedProduct && <EditProduct />}
 			</div>

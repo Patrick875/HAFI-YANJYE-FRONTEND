@@ -5,28 +5,36 @@ import { useState } from "react";
 import { HashLoader } from "react-spinners";
 import { Link, useNavigate } from "react-router-dom";
 import AuthTitle from "./AuthTitle";
-import { GoogleLogin } from "@react-oauth/google";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { error } from "../../shared/types";
 import instance from "../../API";
 import { login } from "../../Redux/authSlice";
 import { useDispatch } from "react-redux";
 
+interface loginData {
+	email: string;
+	password: string;
+}
+
 const Login = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { register, handleSubmit } = useForm();
+	const { register, handleSubmit } = useForm<loginData>();
 	const [error, setError] = useState<error | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
-	const responseMessage = (response) => {
-		console.log(response);
+	const onSuccess = (user: CredentialResponse) => {
+		console.log("Logged in successfully!", user);
+		// You can handle the login success here, e.g., set user state, redirect, etc.
 	};
-	const errorMessage = (error) => {
-		console.log(error);
+
+	const onFailure = () => {
+		console.error("Login failed!", error);
+		// Handle login failure, e.g., show an error message
 	};
 	const handleOnFocus = () => {
 		setError(null);
 	};
-	const loginUser = async (data) => {
+	const loginUser = async (data: loginData) => {
 		setLoading(true);
 		await instance
 			.post("/auth/login", { ...data })
@@ -35,17 +43,24 @@ const Login = () => {
 				navigate("/admin");
 			})
 			.catch((err) => {
-				console.log("err", err);
-				setError({ status: true, message: "error loging in" });
+				if (!Array.isArray(err.response.data.message)) {
+					console.log("err", err.response.data.message);
+					setError({ status: true, message: err.response.data.message });
+				} else {
+					console.log("err", err);
+					setError({ status: true, message: err.response.data.message[0] });
+				}
 			})
 			.finally(() => {
 				setLoading(false);
+				navigate("/admin");
 			});
 	};
 	return (
 		<motion.div
-			initial={{ opacity: 0, x: -50, transition: { duration: 0.5 } }}
-			animate={{ opacity: 1, x: 0, transition: { duration: 0.8 } }}
+			initial={{ opacity: 0, x: -50 }}
+			transition={{ duration: 0.8 }}
+			animate={{ opacity: 1, x: 0 }}
 			className="basis-5/6">
 			<AuthTitle />
 			<div className="flex justify-center">
@@ -101,7 +116,7 @@ const Login = () => {
 				</div>
 			)}
 			<hr />
-			<GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
+			<GoogleLogin onSuccess={onSuccess} onError={onFailure} />
 		</motion.div>
 	);
 };

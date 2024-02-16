@@ -21,10 +21,7 @@ const SideBar = ({ navlinks, backgroundColor }: SideBarNavProps) => {
 							key={crypto.randomUUID()}
 							page={el.page}
 							link={el.link}
-							icon={el.icon}
 							defaultColor="theme-yellow"
-							iconActive={el.iconActive}
-							alt={el.alt}
 							location={el.location}>
 							{el.icon}
 						</NavItem>

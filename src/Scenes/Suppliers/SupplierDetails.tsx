@@ -1,8 +1,4 @@
-import React from "react";
-
-type Props = {};
-
-function SupplierDetails({}: Props) {
+function SupplierDetails() {
 	return <div>SupplierDetails</div>;
 }
 

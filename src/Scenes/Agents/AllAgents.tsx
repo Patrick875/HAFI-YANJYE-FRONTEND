@@ -9,6 +9,7 @@ function AllAgents() {
 	const { register } = useForm();
 	const navigate = useNavigate();
 	const { data: agents, loading } = useFetchData("/users");
+	console.log("agents", agents);
 
 	return (
 		<div>

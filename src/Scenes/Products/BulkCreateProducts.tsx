@@ -13,36 +13,30 @@ function BulkCreateProducts() {
 		backgroundColor: "#ffffff",
 		textAlign: "center",
 		cursor: "pointer",
-	};
+	} as React.CSSProperties;
 
-	const [files, setFiles] = useState([]);
+	const [files, setFiles] = useState<any[]>([]);
 
-	const onDrop = (acceptedFiles) => {
-		const newFiles = acceptedFiles.map((file) => ({
+	const onDrop = (acceptedFiles: File[]) => {
+		const validFiles = acceptedFiles.filter(
+			(file) => file.name.endsWith(".xls") || file.name.endsWith(".xlsx")
+		);
+		const newFiles = validFiles.map((file) => ({
 			url: URL.createObjectURL(file),
 			data: fileToDataURL(file),
 			name: file.name,
 		}));
 
-		setFiles([...files, ...newFiles]);
+		setFiles((prev) => [...prev, ...newFiles]);
 	};
 
-	const removeFile = (index) => {
+	const removeFile = (index: number) => {
 		const updatedFiles = [...files];
 		updatedFiles.splice(index, 1);
 		setFiles(updatedFiles);
 	};
 
-	const handleFileInputChange = (fileIndex, base64) => {
-		const updatedFiles = [...files];
-		updatedFiles[fileIndex].data = base64;
-		setFiles(updatedFiles);
-	};
-
-	const { getRootProps, getInputProps } = useDropzone({
-		onDrop,
-		accept: [".xls", ".xlsx"], // Accept spreadsheet files
-	});
+	const { getRootProps, getInputProps } = useDropzone({ onDrop });
 	const uploadFiles = () => {
 		const submittableFiles = files.map((doc) => doc.data);
 		console.log("submit", submittableFiles);

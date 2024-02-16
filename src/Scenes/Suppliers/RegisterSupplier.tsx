@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import usePostData from "../../Hooks/usePostData";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { fileToDataURL } from "../../shared/constants";
 import { HashLoader } from "react-spinners";
 import { BsFileExcel } from "react-icons/bs";
-import { IoRemove, IoRemoveCircleOutline } from "react-icons/io5";
+import { IoRemoveCircleOutline } from "react-icons/io5";
 import BackButton from "../../shared/BackButton";
 
 interface catalog {
@@ -13,30 +13,38 @@ interface catalog {
 	name: string;
 }
 
-function RegisterSupplier() {
-	const { postData, isLoading } = usePostData();
-	const { register, handleSubmit } = useForm();
-	const [catalog, setCatalog] = useState<catlog | null>(null);
-	const handleFileChange = async (e) => {
-		const files = e.target.files;
+interface registerSupplierType {
+	fullName: string;
+	telphone: string;
+	email: string;
+	location?: string;
+}
 
-		const sheetsArray: catalog[] = await Promise.all(
-			Array.from(files).map(async (file) => {
-				const dataUrl: string = await fileToDataURL(file);
-				return {
-					url: URL.createObjectURL(file),
-					data: dataUrl,
-					name: file.name,
-				};
-			})
-		);
+function RegisterSupplier() {
+	const { isLoading } = usePostData();
+	const { register, handleSubmit } = useForm<registerSupplierType>();
+	const [catalog, setCatalog] = useState<catalog | null>(null);
+	const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+		const files = e.target.files;
+		let sheetsArray: catalog[] = [];
+		if (files) {
+			sheetsArray = await Promise.all(
+				Array.from(files).map(async (file) => {
+					const dataUrl: string = await fileToDataURL(file);
+					return {
+						url: URL.createObjectURL(file),
+						data: dataUrl,
+						name: file.name,
+					};
+				})
+			);
+		}
 
 		setCatalog(sheetsArray[0]);
 	};
-	const registerSupplier = (data) => {
+	const registerSupplier = (data: registerSupplierType) => {
 		console.log("data", data);
 	};
-	console.log("this is catalog", catalog);
 
 	return (
 		<div>

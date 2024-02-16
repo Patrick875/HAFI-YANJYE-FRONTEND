@@ -27,6 +27,7 @@ export interface image {
     product: string;
     name: string;
 }
+
 export interface product {
     cost: number;
     description: string;
@@ -35,9 +36,8 @@ export interface product {
     price: number;
     quatity: number;
     images?: image[];
-    category: string;
+    category: category;
 }
-
 export enum OrderStatus {
     PENDING = "PENDING",
     PAID = "PAID",
@@ -52,10 +52,9 @@ export interface order {
     orderId: string;
     orderDate: string;
     status: OrderStatus;
-    orderDetails: string;
+    orderDetails: OrderItem[];
     customer: customer;
 }
-
 export interface customer {
     id: number;
     fullName: string;
@@ -65,8 +64,6 @@ export interface customer {
     email: string;
     password: string;
 }
-
-
 
 export type OrderItem = {
     id: number;
@@ -88,7 +85,8 @@ export interface agent {
     password?: string;
     role: string;
     telphone: string;
-    tinNumber: string | null
+    tinNumber: string | null;
+    location?: string;
 }
 export interface identityPerson {
     fullName: string;
@@ -97,4 +95,10 @@ export interface identityPerson {
 export interface identityItem {
     name: string;
     id: number
+}
+export interface category {
+    name: string;
+    id: number;
+    images: image[]
+    products?: product[]
 }

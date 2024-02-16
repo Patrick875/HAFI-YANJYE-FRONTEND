@@ -1,5 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
-import LoginArt from "../../assets/images/LoginArt.png";
+import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
 	return (

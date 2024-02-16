@@ -1,12 +1,12 @@
 import { useForm, Controller } from "react-hook-form";
 import BackButton from "../../shared/BackButton";
 import useFetchData from "../../Hooks/useFetchData";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { GoCheck } from "react-icons/go";
 import { fileToDataURL } from "../../shared/constants";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineCloudUpload } from "react-icons/md";
-import { img } from "../../shared/types";
+import { category, img } from "../../shared/types";
 import usePostData from "../../Hooks/usePostData";
 import { HashLoader } from "react-spinners";
 
@@ -16,19 +16,20 @@ function CreateProduct() {
 	const { register, control, getValues, reset, handleSubmit } = useForm();
 	const [images, setImages] = useState<img[]>([]);
 	const navigate = useNavigate();
-	const handleFileChange = async (e) => {
+	const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files;
-
-		const imagesArray: img[] = await Promise.all(
-			Array.from(files).map(async (file) => {
-				const dataUrl: string = await fileToDataURL(file);
-				return {
-					url: URL.createObjectURL(file),
-					data: dataUrl,
-				};
-			})
-		);
-
+		let imagesArray: img[] = [];
+		if (files) {
+			imagesArray = await Promise.all(
+				Array.from(files).map(async (file) => {
+					const dataUrl: string = await fileToDataURL(file);
+					return {
+						url: URL.createObjectURL(file),
+						data: dataUrl,
+					};
+				})
+			);
+		}
 		setImages((prevImages) => [...prevImages, ...imagesArray]);
 	};
 
@@ -53,12 +54,13 @@ function CreateProduct() {
 			cost: Number(formData.cost),
 			quatity: Number(formData.quatity),
 		};
-
-		console.log("submitted", submitData);
+		return submitData;
 	};
 
 	const createProduct = async () => {
 		const data = getSubmitData();
+		console.log("create-product", data);
+
 		await postData("/products", data);
 		reset();
 		setImages([]);
@@ -208,7 +210,7 @@ function CreateProduct() {
 										Select category
 									</option>
 									{categories &&
-										categories.map((cat) => (
+										categories.map((cat: category) => (
 											<option
 												className="capitalize"
 												key={cat.id}

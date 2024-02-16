@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { img } from "../../shared/types";
 import { fileToDataURL } from "../../shared/constants";
@@ -8,20 +8,23 @@ import { HashLoader } from "react-spinners";
 
 function CreateCategory() {
 	const { register, control, getValues, reset, handleSubmit } = useForm();
-	const { postData, isLoading: loading, error } = usePostData();
+	const { postData, isLoading: loading } = usePostData();
 	const [images, setImages] = useState<img[]>([]);
-	const handleFileChange = async (e) => {
+	const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files;
-		const imagesArray: img[] = await Promise.all(
-			Array.from(files).map(async (file) => {
-				const dataUrl: string = await fileToDataURL(file);
-				return {
-					url: URL.createObjectURL(file),
-					data: dataUrl,
-				};
-			})
-		);
+		let imagesArray: img[] = [];
 
+		if (files) {
+			imagesArray = await Promise.all(
+				Array.from(files).map(async (file) => {
+					const dataUrl: string = await fileToDataURL(file);
+					return {
+						url: URL.createObjectURL(file),
+						data: dataUrl,
+					};
+				})
+			);
+		}
 		setImages([...imagesArray]);
 	};
 	const getSubmitData = () => {
@@ -122,7 +125,7 @@ function CreateCategory() {
 						</div>
 					</div>
 				</div>
-				<div className="flex w-full justify-end">
+				<div className="flex justify-end w-full">
 					<button
 						type="submit"
 						disabled={loading}

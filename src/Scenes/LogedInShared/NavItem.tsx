@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 interface Props {
@@ -5,6 +6,7 @@ interface Props {
 	link: string;
 	location: string;
 	defaultColor: string;
+	children: ReactNode;
 }
 
 export const NavItem = ({

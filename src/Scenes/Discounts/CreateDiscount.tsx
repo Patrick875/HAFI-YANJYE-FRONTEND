@@ -1,34 +1,51 @@
 import { FaCircleCheck } from "react-icons/fa6";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import useFetchData from "../../Hooks/useFetchData";
 import { IoCalendar } from "react-icons/io5";
 import instance from "../../API";
 import DatePicker from "react-datepicker";
 import toast from "react-hot-toast";
+import { HashLoader } from "react-spinners";
+import { category, product } from "../../shared/types";
+
+interface createDiscountType {
+	rate: string;
+	costOfOrder: string;
+	numberOfItems: string;
+	endAt: string;
+	startAt: string;
+	name: string;
+}
 
 function CreateDiscount() {
-	const { register, control, handleSubmit } = useForm();
+	const { register, control, handleSubmit } = useForm<createDiscountType>();
 	const { data: categories } = useFetchData("/categories");
 	const { data: products } = useFetchData("/products");
 	const [loading, setLoading] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const types: string[] = ["all", "categories", "products"];
 	const [selectedType, setSelectedType] = useState<string>(types[0]);
-	const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-	const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
-	const onSelectItem = (e) => {
+	const [selectedCategories, setSelectedCategories] = useState<category[]>([]);
+	const [selectedProducts, setSelectedProducts] = useState<product[]>([]);
+	const onSelectItem = (e: ChangeEvent<HTMLSelectElement>) => {
 		if (selectedType === "products") {
 			const prod =
-				products && products.filter((prod) => prod.id == e.target.value)[0];
-			if (selectedProducts.filter((pr) => pr.id === prod.id).length === 0) {
+				products &&
+				products.filter(
+					(prod: product) => prod.id === Number(e.target.value)
+				)[0];
+			if (selectedProducts.filter((pr) => pr === prod.id).length === 0) {
 				setSelectedProducts((prev) => [...prev, prod]);
 			}
 		} else if (selectedType === "categories") {
 			const cat =
-				categories && categories.filter((prod) => prod.id == e.target.value)[0];
+				categories &&
+				categories.filter(
+					(cat: category) => cat.id === Number(e.target.value)
+				)[0];
 			if (
-				selectedCategories.filter((category) => category.id === cat.id)
+				selectedCategories.filter((categ: category) => categ === cat.id)
 					.length === 0
 			) {
 				setSelectedCategories((prev) => [...prev, cat]);
@@ -37,13 +54,16 @@ function CreateDiscount() {
 	};
 
 	console.log("select --- items", selectedProducts);
-	const createDiscount = async (data) => {
+	const createDiscount = async (data: createDiscountType) => {
 		const submitData = {
 			...data,
+			numberOfItems: Number(data.numberOfItems),
+			costOfOrder: Number(data.costOfOrder),
 			rate: Number(data.rate),
 			productIds: selectedProducts.map((el) => el.id),
 			categoryIds: selectedCategories.map((el) => el.id),
 		};
+
 		setLoading(true);
 		await instance
 			.post("/discounts", { ...submitData, type: selectedType })
@@ -96,7 +116,7 @@ function CreateDiscount() {
 									<DatePicker
 										placeholderText="select received date"
 										onChange={(date) => field.onChange(date)}
-										selected={field.value}
+										selected={new Date(field.value)}
 										showIcon
 										className="w-full border-[1.5px] text-xs border-gray-800 rounded-[4px]"
 										icon={<IoCalendar className="w-3 h-3 " />}
@@ -117,7 +137,7 @@ function CreateDiscount() {
 									<DatePicker
 										placeholderText="select received date"
 										onChange={(date) => field.onChange(date)}
-										selected={field.value}
+										selected={new Date(field.value)}
 										showIcon
 										className="w-full border-[1.5px] text-xs border-gray-800 rounded-[4px]"
 										icon={<IoCalendar className="w-3 h-3 " />}
@@ -209,7 +229,7 @@ function CreateDiscount() {
 													Select ...
 												</option>
 												{categories &&
-													categories.map((cat) => (
+													categories.map((cat: category) => (
 														<option
 															className="capitalize"
 															key={cat.id}
@@ -238,7 +258,7 @@ function CreateDiscount() {
 												Select products
 											</option>
 											{products &&
-												products.map((prod) => (
+												products.map((prod: product) => (
 													<option
 														className="capitalize"
 														key={prod.id}
@@ -255,7 +275,7 @@ function CreateDiscount() {
 					<div className="grid w-full grid-cols-3 gap-3">
 						{selectedType === "products"
 							? selectedProducts.length !== 0 &&
-							  selectedProducts.map((prod) => (
+							  selectedProducts.map((prod: product) => (
 									<div
 										className="flex items-center  rounded-[6px] justify-between p-2 my-1 text-xs font-medium bg-[#f0f0f0]"
 										key={prod.id}>
@@ -273,7 +293,7 @@ function CreateDiscount() {
 							  ))
 							: selectedType === "categories"
 							? selectedCategories.length !== 0 &&
-							  selectedCategories.map((cat) => (
+							  selectedCategories.map((cat: category) => (
 									<div
 										className="flex items-center  rounded-[6px] justify-between p-2 my-1 text-xs font-medium bg-[#f0f0f0]"
 										key={cat.id}>
@@ -292,8 +312,18 @@ function CreateDiscount() {
 							: null}
 					</div>
 
-					<button className="px-12 py-2 my-3 text-xs rounded-[4px] text-white bg-teal-900">
-						Create
+					<button
+						type="submit"
+						className={`  px-6 py-1  mt-3 text-xs font-semibold text-center rounded-[4px] ${
+							!loading
+								? " text-white bg-teal-900"
+								: " text-teal-900 bg-[#E4F1FE]"
+						}`}>
+						{!loading ? (
+							"Create "
+						) : (
+							<HashLoader color="#0C4981" loading={loading} size={15} />
+						)}
 					</button>
 				</div>
 			</form>

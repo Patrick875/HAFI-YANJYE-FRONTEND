@@ -10,7 +10,6 @@ import AdminDashboard from "./Scenes/AdminDashboard";
 import Products from "./Scenes/Products";
 import Categories from "./Scenes/Categories";
 import Orders from "./Scenes/Orders";
-import Discounts from "./Scenes/Discounts";
 import Agents from "./Scenes/Agents";
 import Suppliers from "./Scenes/Suppliers";
 import Locations from "./Scenes/Locations";
@@ -41,6 +40,12 @@ import RegisterSupplier from "./Scenes/Suppliers/RegisterSupplier";
 import SupplierDetails from "./Scenes/Suppliers/SupplierDetails";
 import Order from "./Scenes/Orders/Order";
 import ProcessOrder from "./Scenes/Orders/ProcessOrder";
+import AgentOrderDetails from "./Scenes/AgentsDashoard/AgentOrderDetails";
+import AgentLayout from "./Scenes/AgentsDashoard/AgentLayout";
+import AgentDashboard from "./Scenes/AgentsDashoard";
+import AgentOrders from "./Scenes/AgentsDashoard/AgentOrders";
+import AllAgentOrders from "./Scenes/AgentsDashoard/AllAgentOrders";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
 	return (
@@ -49,7 +54,14 @@ function App() {
 				<Toaster position="top-center" toastOptions={{ duration: 5000 }} />
 				<Routes>
 					<Route path="/" element={<AuthLayout />}>
-						<Route index element={<Login />} />
+						<Route
+							index
+							element={
+								<GoogleOAuthProvider clientId="789303875610-cuhkfvk71qohmmijih1d6tmp1dtdlsk1.apps.googleusercontent.com">
+									<Login />
+								</GoogleOAuthProvider>
+							}
+						/>
 						<Route path="register" element={<Signup />} />
 						<Route path="reset-password" element={<ResetPassword />} />
 					</Route>
@@ -94,6 +106,14 @@ function App() {
 						</Route>
 						<Route path="locations" element={<Locations />} />
 						<Route path="analytics" element={<Analytics />} />
+					</Route>
+
+					<Route path="/agent" element={<AgentLayout />}>
+						<Route index element={<AgentDashboard />} />
+						<Route path="orders" element={<AgentOrders />}>
+							<Route index element={<AllAgentOrders />} />
+							<Route path=":id" element={<AgentOrderDetails />} />
+						</Route>
 					</Route>
 					<Route path="*" element={<Page404 />} />
 				</Routes>

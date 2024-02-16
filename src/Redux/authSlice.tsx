@@ -5,9 +5,12 @@ interface AuthState {
 	user: user | null;
 }
 
-const userFromLocalStorage = localStorage.getItem("user")
-	? JSON.parse(localStorage.getItem("user"))
+const userFromLocalStorageString = localStorage.getItem("user");
+
+const userFromLocalStorage = userFromLocalStorageString
+	? JSON.parse(userFromLocalStorageString)
 	: null;
+
 const initialState: AuthState = {
 	user: userFromLocalStorage || null,
 };
@@ -21,8 +24,8 @@ const authSlice = createSlice({
 		},
 		logout: (state) => {
 			state.user = null;
-			localStorage.setItem("token", null);
-			localStorage.setItem("user", null);
+			localStorage.setItem("token", "");
+			localStorage.setItem("user", "");
 		},
 	},
 });

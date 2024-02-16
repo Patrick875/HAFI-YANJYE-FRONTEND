@@ -5,9 +5,10 @@ import useFetchData from "../../Hooks/useFetchData";
 import { useMemo, useState } from "react";
 import { HashLoader } from "react-spinners";
 import ReactPaginate from "react-paginate";
+import { category, product } from "../../shared/types";
 
 interface itemprops {
-	el: product;
+	el: category;
 }
 
 const Item = ({ el }: itemprops) => {
@@ -16,7 +17,17 @@ const Item = ({ el }: itemprops) => {
 			key={el.id}
 			className="my-2 text-xs p-4 flex md:flex-row  gap-2 flex-col items-center md:items-stretch  md:justify-between bg-white w-full rounded-[8px]">
 			<div className="flex flex-1 gap-2 md:block ">
-				<img src={el.image} className="block object-contain w-12 h-12 " />
+				{el.images && el.images[0].link ? (
+					<img
+						src={el.images && el.images[0].link}
+						className="block object-contain w-12 h-12 "
+					/>
+				) : (
+					<img
+						src="https://placehold.co/600x400/png"
+						className="block object-contain w-12 h-12 "
+					/>
+				)}
 			</div>
 			<div className="flex flex-1 gap-2 md:block ">
 				<p className="font-medium ">Name</p>
@@ -24,7 +35,7 @@ const Item = ({ el }: itemprops) => {
 			</div>
 			<div className="flex-1">
 				<p className="font-medium text-center md:text-start">Items</p>
-				<p className="capitalize">{el.products.length}</p>
+				<p className="capitalize">{el.products && el.products.length}</p>
 			</div>
 		</div>
 	);
@@ -37,15 +48,18 @@ function AllCategories() {
 	const { data, loading } = useFetchData("/categories");
 
 	const [pageNumber, setPageNumber] = useState<number | null>(0);
-	const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+	// const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+	const itemsPerPage = 10;
 	const pagesVisited = pageNumber ? pageNumber * itemsPerPage : 0;
 
 	const displayItems =
 		data &&
 		query === "" &&
-		data.slice(pagesVisited, pagesVisited + itemsPerPage).map((el: product) => {
-			return <Item el={el} key={el.id} />;
-		});
+		data
+			.slice(pagesVisited, pagesVisited + itemsPerPage)
+			.map((el: category) => {
+				return <Item el={el} key={el.id} />;
+			});
 
 	const searchResults = useMemo(() => {
 		if (query !== "" && data && data.length !== 0) {
@@ -54,7 +68,7 @@ function AllCategories() {
 					item.name.toLowerCase().includes(query.toLowerCase())
 				)
 				.slice(pagesVisited, pagesVisited + itemsPerPage)
-				.map((el: product) => <Item key={el.id} el={el} />);
+				.map((el: category) => <Item key={el.id} el={el} />);
 		} else {
 			return [];
 		}
@@ -71,7 +85,7 @@ function AllCategories() {
 
 	const pages: number | null = pageCount();
 
-	const changePage = ({ selected }) => {
+	const changePage = ({ selected }: { selected: number | null }) => {
 		setPageNumber(selected);
 	};
 	const paginationComStyles: string =
@@ -117,7 +131,7 @@ function AllCategories() {
 						nextLabel="Next"
 						activeLinkClassName="text-white bg-purple-900"
 						nextLinkClassName={`${pagNextPrevStyles}`}
-						pageCount={pages}
+						pageCount={pages ? pages : 0}
 						pageLinkClassName={`${paginationComStyles}`}
 						onPageChange={changePage}
 						containerClassName="rounded-sm p-3 bg-white flex gap-3 items-center "

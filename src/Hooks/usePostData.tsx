@@ -16,6 +16,7 @@ const usePostData = () => {
 			})
 			.catch((err) => {
 				console.log("this is the error", err);
+				toast.error(err.code);
 
 				setError({ status: true, message: "error !!!" });
 				const errorConstant = err.response.data.message;

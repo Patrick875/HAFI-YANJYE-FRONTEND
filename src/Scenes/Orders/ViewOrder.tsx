@@ -1,18 +1,23 @@
-import { useNavigate, useOutletContext, } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { OrderItem } from "../../shared/types";
 import React, { useState } from "react";
 import BackButton from "../../shared/BackButton";
 import instance from "../../API";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { getUser } from "../../store";
+import useFetchData from "../../Hooks/useFetchData";
 
 function ViewOrder() {
-	const navigate= useNavigate()
-	const {role,order}= useOutletContext()
+	const navigate = useNavigate();
+	const { orderId } = useParams();
+	const user = useSelector(getUser);
+	const { data: order } = useFetchData(`/orders/${orderId}`);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [success, setSuccess] = useState<boolean>(false);
 	const total: number | null =
 		order && order.orderDetails
-			? order.orderDetails.reduce((acc, ord) => {
+			? order.orderDetails.reduce((acc: number, ord: OrderItem) => {
 					const prod = Number(ord.product.cost * ord.quantity);
 					return acc + prod;
 			  }, 0)
@@ -21,7 +26,7 @@ function ViewOrder() {
 	const cancelOrder = async () => {
 		setLoading(true);
 		await instance
-			.patch(`/orders/${order.orderId}`, { status: "CANCELED" })
+			.patch(`/orders/${orderId}`, { status: "CANCELED" })
 			.then((res) => {
 				setSuccess(true);
 				return res;
@@ -50,13 +55,14 @@ function ViewOrder() {
 						<p className="w-1/2 text-xs font-bold uppercase">
 							{order && order.orderId}
 						</p>
-						{role === "ADMIN" && order.status === "PENDING" && (
+
+						{user && user.role === "ADMIN" && order.status === "PENDING" && (
 							<div className="flex justify-end w-1/2 gap-2">
 								<button
-								onClick={()=>{
-									navigate('process')
-								}}
-								className="p-2 px-4 rounded-[6px]  text-xs text-white bg-teal-900">
+									onClick={() => {
+										navigate("process");
+									}}
+									className="p-2 px-4 rounded-[6px]  text-xs text-white bg-teal-900">
 									Process
 								</button>
 								<button

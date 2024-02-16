@@ -13,7 +13,7 @@ import { FcCancel, FcPaid } from "react-icons/fc";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
-function AllOrders() {
+function AllAgentOrders() {
 	const { register } = useForm();
 	const navigate = useNavigate();
 	const { data: orders, loading } = useFetchData("/orders");
@@ -138,4 +138,4 @@ function AllOrders() {
 	);
 }
 
-export default AllOrders;
+export default AllAgentOrders;

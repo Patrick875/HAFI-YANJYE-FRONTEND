@@ -13,7 +13,7 @@ const productsSlice = createSlice({
 	name: "products",
 	initialState,
 	reducers: {
-		selectProduct: (state, action: PayloadAction<product>) => {
+		selectProduct: (state, action: PayloadAction<product | null>) => {
 			return {
 				...state,
 				selectedProduct: action.payload,

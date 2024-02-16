@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-function Order() {
+function AgentOrders() {
 	return (
 		<div>
 			<Outlet />
@@ -8,4 +8,4 @@ function Order() {
 	);
 }
 
-export default Order;
+export default AgentOrders;

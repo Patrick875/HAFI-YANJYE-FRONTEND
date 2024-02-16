@@ -1,5 +1,5 @@
 import { user } from '../shared/types';
-import { decryptAndRetrieveToken, encryptTokenAndStoreToLocalStorage, serverUrl, testingUrl } from './../shared/constants';
+import { decryptAndRetrieveToken, encryptTokenAndStoreToLocalStorage, serverUrl } from './../shared/constants';
 import axios from 'axios'
 
 const instance = axios.create({
@@ -13,6 +13,7 @@ instance.interceptors.response.use(function (response) {
         //storing an encrypted token in localstorage
 
         encryptTokenAndStoreToLocalStorage(response.data.data.token)
+
 
 
         //const realToken: string = decryptAndRetrieveToken()
@@ -37,6 +38,8 @@ instance.interceptors.request.use(function (config) {
 
     if (token) {
         const decryptedToken = decryptAndRetrieveToken();
+        console.log('decryptedToken', decryptedToken);
+
         config.headers['Authorization'] = `Bearer ${decryptedToken}`;
     }
 

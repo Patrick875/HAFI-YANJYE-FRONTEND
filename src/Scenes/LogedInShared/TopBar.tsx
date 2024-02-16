@@ -7,8 +7,10 @@ import { HiMagnifyingGlass } from "react-icons/hi2";
 import { IoIosSettings } from "react-icons/io";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { logout } from "../../Redux/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../store";
 const TopNavDropdown = () => {
+	const user = useSelector(getUser);
 	const dispatch = useDispatch();
 	const [profileOn, setProfileOn] = useState(false);
 	const handleLogoutUser = () => {
@@ -26,8 +28,8 @@ const TopNavDropdown = () => {
 						<CiUser />
 					</div>
 					<div>
-						<p className="text-xs font-medium capitalize">John Doe</p>
-						<p className="text-xs ">Admin</p>
+						<p className="text-xs font-medium capitalize">{user?.fullname}</p>
+						<p className="text-xs ">{user?.role}</p>
 					</div>
 				</div>
 

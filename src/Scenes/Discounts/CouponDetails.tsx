@@ -1,8 +1,4 @@
-import React from "react";
-
-type Props = {};
-
-function CouponDetails({}: Props) {
+function CouponDetails() {
 	return <div>CouponDetails</div>;
 }
 

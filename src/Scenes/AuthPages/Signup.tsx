@@ -7,37 +7,33 @@ import AuthTitle from "./AuthTitle";
 import instance from "../../API";
 import toast from "react-hot-toast";
 
+interface signupType {
+	fullName: string;
+	email: string;
+	telphone: string;
+	password: string;
+	confirmPassword: string;
+}
+
 const Signup = () => {
-	const { register, handleSubmit, watch, reset } = useForm();
+	const { register, handleSubmit, watch, reset } = useForm<signupType>();
 	const password = watch("password") || "";
 	const confirmPassword = watch("confirmPassword") || "";
-	const [success, setSuccess] = useState<boolean | null>(false);
-	const [error, setError] = useState<boolean | null>(null);
-	const [message, setMessage] = useState<string[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
-	const handleOnFocus = () => {
-		setSuccess(null);
-		setError(null);
-		setMessage([]);
-	};
-	const signup = async (data) => {
-		console.log("data", data);
 
+	const signup = async (data: signupType) => {
 		setLoading(true);
 		await instance
 			.post("/auth/register", { ...data })
-			.then((res) => {
-				setSuccess(true);
+			.then(() => {
 				toast.success("User signup success");
 			})
 			.catch((err) => {
 				console.log(err);
 				if (err.response.data.statusCode !== 500) {
-					setError(true);
-					setMessage(err.response.data.message);
+					toast.error(err.response.data.message);
 				} else {
-					setError(true);
-					setMessage(["Internal Server Error"]);
+					toast.error("Internal Server Error");
 				}
 			})
 			.finally(() => {
@@ -48,8 +44,9 @@ const Signup = () => {
 
 	return (
 		<motion.div
-			initial={{ opacity: 0, x: -50, transition: { duration: 0.5 } }}
-			animate={{ opacity: 1, x: 0, transition: { duration: 0.8 } }}
+			initial={{ opacity: 0, x: -50 }}
+			animate={{ opacity: 1, x: 0 }}
+			transition={{ duration: 0.5 }}
 			className="basis-5/6">
 			<AuthTitle />
 
@@ -60,14 +57,12 @@ const Signup = () => {
 					type="text"
 					placeholder="Fullname"
 					{...register("fullName")}
-					onFocus={handleOnFocus}
 				/>
 				<input
 					className="w-full px-3 py-1 my-3 font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900"
 					type="text"
 					placeholder="Telephone"
 					{...register("telphone")}
-					onFocus={handleOnFocus}
 				/>
 
 				<input
@@ -75,21 +70,18 @@ const Signup = () => {
 					type="email"
 					placeholder="Email"
 					{...register("email")}
-					onFocus={handleOnFocus}
 				/>
 				<input
 					className="w-full px-3 py-1 my-3 font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900"
 					type="password"
 					placeholder="Password"
 					{...register("password")}
-					onFocus={handleOnFocus}
 				/>
 				<input
 					className="w-full px-3 py-1 my-3 font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900"
 					type="password"
 					placeholder="Confirm Password"
 					{...register("confirmPassword")}
-					onFocus={handleOnFocus}
 				/>
 
 				<button
@@ -118,14 +110,6 @@ const Signup = () => {
 					Passwords don't match
 				</p>
 			)}
-			{error &&
-				message.map((mes) => (
-					<div className="flex items-center justify-center w-4/5 p-2 mx-auto mt-2 bg-pink-100 border border-pink-700 ">
-						<p className="text-xs font-medium text-center text-pink-800 capitalize align-middle ">
-							{mes}
-						</p>
-					</div>
-				))}
 		</motion.div>
 	);
 };

@@ -3,7 +3,7 @@ import { HiMagnifyingGlass } from "react-icons/hi2";
 import CreateButton from "../../shared/CreateButton";
 
 function AllCoupons() {
-	const { register, watch } = useForm();
+	const { register } = useForm();
 	return (
 		<div>
 			<div className="flex justify-between p-3 py-6 my-3 bg-white">
