@@ -14,20 +14,23 @@ const useFetchData = (url: string): usefetchreturn => {
 	const [error, setError] = useState<any>(null);
 
 	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const response = await instance.get(url);
-				if (response.data) {
-					setData(response.data);
-				}
-			} catch (error) {
-				setError(error);
-			} finally {
-				setLoading(false);
-			}
+		const fetchData = async (url:string) => {
+		
+				 await instance.get(url).then((response)=>{
+						if (response.data) {
+							setData(response.data);
+						}
+				 }).catch((err)=>{
+				setError(err);
+
+				 }).finally(()=>{
+						setLoading(false);
+				 });
+				
+			
 		};
 
-		fetchData();
+		fetchData(url);
 	}, [url]);
 
 	return { data, loading, error };
