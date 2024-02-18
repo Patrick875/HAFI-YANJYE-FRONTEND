@@ -72,6 +72,8 @@ function AllProducts() {
 	const category: string = watch("category") || "";
 	const { data: categories, loading } = useFetchData("/categories");
 	const { data: products } = useFetchData("/products");
+	console.log("products", products);
+
 	const [pageNumber, setPageNumber] = useState<number | null>(0);
 	// const [itemsPerPage, setItemsPerPage] = useState<number>(10);
 	const itemsPerPage = 10;
