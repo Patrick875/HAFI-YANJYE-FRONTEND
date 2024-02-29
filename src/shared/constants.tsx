@@ -10,6 +10,7 @@ import { navitem } from "./types";
 import { IoAnalytics } from "react-icons/io5";
 export const serverUrl: string = "https://hafiyanjyev1-1hbfokff.b4a.run/";
 //export const serverUrl: string = "https://hafi-yanjye-api.onrender.com/";
+export const localServer: string = "http://localhost:3000/";
 export const testingUrl: string = "https://dummyjson.com/";
 const mySecret: string = "hafi-yanjye-secret";
 

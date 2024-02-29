@@ -170,8 +170,23 @@ function ProcessOrder() {
 	const assignAgents = async () => {
 		console.log("assignment", assignedAgents);
 
+		const submitData = assignedAgents
+			.map((el) =>
+				el.items.length !== 0
+					? {
+							agentId: el.agentId,
+							orderItems: el.items,
+					  }
+					: null
+			)
+			.filter((el) => (el ? el : null));
+		console.log("submit-data", submitData);
+
 		await instance
-			.post("/orders/assign/agent", assignedAgents)
+			.post("/orders/assign/agent", {
+				agentId: submitData[0]?.agentId,
+				orderItems: submitData[0]?.orderItems,
+			})
 			.then((res) => {
 				console.log("res", res);
 			})

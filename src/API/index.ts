@@ -1,9 +1,9 @@
 import { user } from '../shared/types';
-import { decryptAndRetrieveToken, encryptTokenAndStoreToLocalStorage, serverUrl } from './../shared/constants';
+import { decryptAndRetrieveToken, encryptTokenAndStoreToLocalStorage, localServer, serverUrl } from './../shared/constants';
 import axios from 'axios'
 
 const instance = axios.create({
-    baseURL: serverUrl
+    baseURL: localServer
 })
 
 
@@ -17,6 +17,8 @@ instance.interceptors.response.use(function (response) {
 
 
         //const realToken: string = decryptAndRetrieveToken()
+
+
         const user: user = {
             fullname: response.data.data.user.fullName,
             email: response.data.data.user.email,

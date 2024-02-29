@@ -64,19 +64,7 @@ function RegisterAgent() {
 							{...register("email")}
 						/>
 					</div>
-					<div>
-						<label
-							htmlFor=""
-							className="block my-1 text-xs font-medium capitalize ">
-							Password
-						</label>
-						<input
-							className="w-full px-3 py-1 my-3 font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900"
-							type="password"
-							{...register("password")}
-							placeholder="Password"
-						/>
-					</div>
+
 					<div>
 						<label
 							htmlFor=""

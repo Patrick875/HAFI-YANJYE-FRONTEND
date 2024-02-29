@@ -50,7 +50,6 @@ function CreateProduct() {
 			images: submitImages,
 			categoryId: Number(formData.categoryId),
 			price: Number(formData.price),
-
 			cost: Number(formData.cost),
 			quatity: Number(formData.quatity),
 		};
@@ -254,7 +253,7 @@ function CreateProduct() {
 								<input
 									type="text"
 									className="w-full py-1 border-2 border-gray-300 rounded-[4px] "
-									{...register("datasheetLink")}
+									{...register("datasheet_link")}
 								/>
 							</div>
 							<div className="flex-1">
@@ -264,7 +263,7 @@ function CreateProduct() {
 								<input
 									type="text"
 									className="w-full py-1 border-2 border-gray-300 rounded-[4px] "
-									{...register("videoLink")}
+									{...register("video_link")}
 								/>
 							</div>
 						</div>
