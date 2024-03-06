@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 import useFetchData from "../../Hooks/useFetchData";
 import { OrderItem, agent, identityPerson } from "../../shared/types";
 import instance from "../../API";
+import { toast } from "react-hot-toast";
 
 interface orderAssign {
 	agentId: number;
@@ -180,17 +181,17 @@ function ProcessOrder() {
 					: null
 			)
 			.filter((el) => (el ? el : null));
-		console.log("submit-data", submitData);
 
 		await instance
 			.post("/orders/assign/agent", {
 				agentId: submitData[0]?.agentId,
 				orderItems: submitData[0]?.orderItems,
 			})
-			.then((res) => {
-				console.log("res", res);
+			.then(() => {
+				toast.success("success !!!!");
 			})
 			.catch((err) => {
+				toast.error(err.code);
 				console.log("errr", err);
 			});
 	};

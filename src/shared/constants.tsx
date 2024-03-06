@@ -79,12 +79,6 @@ export const customerNavs: navitem[] = [
 		location: "admin",
 	},
 	{
-		page: "products",
-		link: "products",
-		icon: <TfiShoppingCartFull />,
-		location: "products",
-	},
-	{
 		page: "Orders",
 		link: "orders",
 		icon: <PiNotepadThin />,
@@ -159,4 +153,21 @@ export function formatDate(customDateString: string): string {
 	const minutes = date.getMinutes().toString().padStart(2, "0");
 
 	return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
+export function isDatePast(inputDate: Date): boolean {
+	const currentDate = new Date();
+	return inputDate < currentDate;
+}
+export function randomStringGenerator(): string {
+	const charset =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@";
+	let randomString = "";
+
+	for (let i = 0; i < 8; i++) {
+		const randomIndex = Math.floor(Math.random() * charset.length);
+		randomString += charset[randomIndex];
+	}
+
+	return randomString;
 }

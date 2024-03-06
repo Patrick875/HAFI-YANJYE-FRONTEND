@@ -13,9 +13,9 @@ interface createDiscountType {
 	rate: string;
 	costOfOrder: string;
 	numberOfItems: string;
-	endAt: string;
-	startAt: string;
-	name: string;
+	endAt: Date;
+	startAt: Date;
+	code: string;
 }
 
 function CreateDiscount() {
@@ -23,7 +23,6 @@ function CreateDiscount() {
 	const { data: categories } = useFetchData("/categories");
 	const { data: products } = useFetchData("/products");
 	const [loading, setLoading] = useState(false);
-	const [success, setSuccess] = useState(false);
 	const types: string[] = ["all", "categories", "products"];
 	const [selectedType, setSelectedType] = useState<string>(types[0]);
 	const [selectedCategories, setSelectedCategories] = useState<category[]>([]);
@@ -35,7 +34,7 @@ function CreateDiscount() {
 				products.filter(
 					(prod: product) => prod.id === Number(e.target.value)
 				)[0];
-			if (selectedProducts.filter((pr) => pr === prod.id).length === 0) {
+			if (selectedProducts.filter((pr) => pr.id === prod.id).length === 0) {
 				setSelectedProducts((prev) => [...prev, prod]);
 			}
 		} else if (selectedType === "categories") {
@@ -53,7 +52,6 @@ function CreateDiscount() {
 		}
 	};
 
-	console.log("select --- items", selectedProducts);
 	const createDiscount = async (data: createDiscountType) => {
 		const submitData = {
 			...data,
@@ -62,23 +60,21 @@ function CreateDiscount() {
 			rate: Number(data.rate),
 			productIds: selectedProducts.map((el) => el.id),
 			categoryIds: selectedCategories.map((el) => el.id),
+			type:
+				selectedType === "all" ? "ALL_PRODUCTS" : selectedType.toUpperCase(),
 		};
 
 		setLoading(true);
 		await instance
-			.post("/discounts", { ...submitData, type: selectedType })
+			.post("/discounts", { ...submitData, type: selectedType.toUpperCase() })
 			.then(() => {
-				setSuccess(true);
+				toast.success("discount created");
 			})
 			.catch((err) => {
 				toast.error(err.response.data.message[0]);
 			})
 			.finally(() => {
 				setLoading(false);
-				if (success) {
-					toast.success("discount created");
-				}
-				setSuccess(false);
 			});
 	};
 
@@ -98,7 +94,7 @@ function CreateDiscount() {
 						</label>
 						<input
 							type="text"
-							{...register("name")}
+							{...register("code")}
 							className=" py-1 rounded-[6px] w-full text-xs bg-transparent border-[1px] border-black"
 						/>
 					</div>
@@ -112,11 +108,12 @@ function CreateDiscount() {
 							<Controller
 								name="startAt"
 								control={control}
+								defaultValue={new Date()}
 								render={({ field }) => (
 									<DatePicker
 										placeholderText="select received date"
 										onChange={(date) => field.onChange(date)}
-										selected={new Date(field.value)}
+										selected={field.value}
 										showIcon
 										className="w-full border-[1.5px] text-xs border-gray-800 rounded-[4px]"
 										icon={<IoCalendar className="w-3 h-3 " />}
@@ -133,11 +130,12 @@ function CreateDiscount() {
 							<Controller
 								name="endAt"
 								control={control}
+								defaultValue={new Date()}
 								render={({ field }) => (
 									<DatePicker
 										placeholderText="select received date"
 										onChange={(date) => field.onChange(date)}
-										selected={new Date(field.value)}
+										selected={field.value}
 										showIcon
 										className="w-full border-[1.5px] text-xs border-gray-800 rounded-[4px]"
 										icon={<IoCalendar className="w-3 h-3 " />}

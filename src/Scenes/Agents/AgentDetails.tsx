@@ -8,6 +8,8 @@ import { OrderItem, order } from "../../shared/types";
 function AgentDetails() {
 	const { agentId } = useParams();
 	const { data: agent, loading } = useFetchData(`users/${agentId}`);
+	console.log("agent", agent);
+
 	const { register } = useForm();
 
 	return (

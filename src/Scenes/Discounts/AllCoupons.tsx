@@ -1,9 +1,14 @@
 import { useForm } from "react-hook-form";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import CreateButton from "../../shared/CreateButton";
+import useFetchData from "../../Hooks/useFetchData";
+import { ICoupon } from "../../shared/types";
+import CouponTile from "./CouponTile";
 
 function AllCoupons() {
 	const { register } = useForm();
+	const { data: coupons } = useFetchData("/coupons");
+
 	return (
 		<div>
 			<div className="flex justify-between p-3 py-6 my-3 bg-white">
@@ -18,6 +23,11 @@ function AllCoupons() {
 					</div>
 				</form>
 				<CreateButton text="Add New" />
+			</div>
+			<div className="p-4">
+				{coupons &&
+					coupons.length !== 0 &&
+					coupons.map((el: ICoupon) => <CouponTile key={el.id} coupon={el} />)}
 			</div>
 		</div>
 	);

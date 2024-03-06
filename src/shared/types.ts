@@ -87,6 +87,8 @@ export interface agent {
     telphone: string;
     tinNumber: string | null;
     location?: string;
+    orderProcessor: [];
+    orders?: order[];
 }
 export interface identityPerson {
     fullName: string;
@@ -102,3 +104,35 @@ export interface category {
     images: image[]
     products?: product[]
 }
+
+
+export interface IDiscount {
+    id: number;
+    startAt: Date;
+    endAt: Date;
+    rate: number;
+    code: string;
+    type: DiscountType;
+    products?: product[];
+    categories?: category[];
+}
+
+export enum DiscountType {
+    ALL_PRODUCTS = 'ALL_PRODUCTS',
+    CATEGORIES = 'CATEGORIES',
+    PRODUCTS = "PRODUCTS"
+}
+export interface ICoupon {
+    id?: number;
+    code: string;
+    startAt: Date;
+    endAt: Date;
+    rate: number;
+    minItems: number;
+    timeUsage?: number;
+    minCost: number;
+    products?: product[];
+    order?: order
+}
+
+

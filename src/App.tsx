@@ -46,6 +46,7 @@ import AgentDashboard from "./Scenes/AgentsDashoard";
 import AgentOrders from "./Scenes/AgentsDashoard/AgentOrders";
 import AllAgentOrders from "./Scenes/AgentsDashoard/AllAgentOrders";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import CouponsLayout from "./Scenes/Discounts/CouponsLayout";
 
 function App() {
 	return (
@@ -89,7 +90,8 @@ function App() {
 							<Route index element={<AllDiscounts />} />
 							<Route path="create" element={<CreateDiscount />} />
 							<Route path=":id" element={<DiscountDetails />} />
-							<Route path="coupons" element={<AllCoupons />}>
+							<Route path="coupons" element={<CouponsLayout />}>
+								<Route index element={<AllCoupons />} />
 								<Route path="create" element={<CreateCoupon />} />
 								<Route path=":id" element={<CouponDetails />} />
 							</Route>

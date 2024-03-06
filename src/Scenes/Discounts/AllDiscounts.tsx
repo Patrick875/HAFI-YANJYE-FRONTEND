@@ -1,9 +1,15 @@
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import CreateButton from "../../shared/CreateButton";
 import { useForm } from "react-hook-form";
+import useFetchData from "../../Hooks/useFetchData";
+import { isDatePast } from "../../shared/constants";
+import { IDiscount } from "../../shared/types";
+import DiscountTile from "./DiscountTile";
 
 function AllDiscounts() {
 	const { register } = useForm();
+
+	const { data: discounts } = useFetchData("/discounts");
 
 	return (
 		<div>
@@ -20,9 +26,12 @@ function AllDiscounts() {
 				</form>
 				<CreateButton text="Add New" />
 			</div>
-			<div>
-				
-				
+			<div className="p-4">
+				{discounts &&
+					discounts.length !== 0 &&
+					discounts.map((el: IDiscount) => (
+						<DiscountTile key={el.id} discount={el} />
+					))}
 			</div>
 		</div>
 	);
