@@ -45,7 +45,6 @@ function ViewOrder() {
 				}
 			});
 	};
-	console.log("order", order);
 
 	return (
 		<div>

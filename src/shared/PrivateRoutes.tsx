@@ -9,12 +9,20 @@ interface privateRoutesProps {
 }
 export const PrivateRoutes = ({ element }: privateRoutesProps) => {
 	const user = useSelector(getUser);
+	console.log("user", user);
+
 	const localHostUser = localStorage.getItem("user");
 	const token = localStorage.getItem("token");
 	if (!user && !token && !localHostUser) {
 		return <Navigate to="/" />;
-	} else {
-		<Navigate to={`/admin`} />;
+	} else if (user) {
+		if (user.role === "AGENT") {
+			return <Navigate to={`/agent`} />;
+		} else if (user.role === "CUSTOMER") {
+			return <Navigate to={`/customer`} />;
+		} else {
+			return <Navigate to={`/admin`} />;
+		}
 	}
 
 	return element;

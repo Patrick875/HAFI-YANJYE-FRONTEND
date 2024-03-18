@@ -67,7 +67,7 @@ export interface customer {
 
 export type OrderItem = {
     id: number;
-    product: {
+    product?: {
         id: number;
         name: string;
         description: string;
@@ -135,4 +135,23 @@ export interface ICoupon {
     order?: order
 }
 
+export interface OrderProcessI {
+    id: number;
+    orderItemId: number;
+    agentId: number;
+    processStatus: string;
+    orderItem: {
+        id: number;
+        quantity: number;
+        pricePerItem: number;
+        order: {
+            id: number;
+            orderId: string;
+            orderDate: string;
+            total: number;
+            status: OrderStatus;
+        }
+    }
+
+}
 

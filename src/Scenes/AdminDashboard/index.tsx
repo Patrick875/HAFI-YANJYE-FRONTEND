@@ -25,7 +25,7 @@ const AdminDashboard = () => {
 	const { data: agents, loading: loading2 } = useFetchData("/users");
 	const { data: products, loading: loading3 } = useFetchData("/products");
 	const [agentOrders, setAgentOrders] = useState([]);
-	const getAllAgentOrders = async (userId) => {
+	const getAllAgentOrders = async (userId: number) => {
 		await instance
 			.get(`/users/${userId}`)
 			.then((res) => {
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
 			const customers = agents.filter((agent) => agent.role === "CUSTOMER");
 			setNumberOfCustomers(customers.length);
 		}
-		if (user.role === "AGENT") {
+		if (user && user.role === "AGENT" && user.id) {
 			getAllAgentOrders(user.id);
 		}
 	}, [agents]);
