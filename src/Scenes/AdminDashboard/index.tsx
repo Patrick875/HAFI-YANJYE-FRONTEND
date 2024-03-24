@@ -12,7 +12,7 @@ import { BsBoxSeam } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import OrdersTableHeader from "../Orders/OrdersTableHeader";
 import { formatDate } from "../../shared/constants";
-import { order, product } from "../../shared/types";
+import { agent, order, product } from "../../shared/types";
 import OrderStatusComponent from "../Orders/OrderStatusComponent";
 import instance from "../../API";
 
@@ -43,7 +43,9 @@ const AdminDashboard = () => {
 
 	useEffect(() => {
 		if (agents && agents.length !== 0) {
-			const customers = agents.filter((agent) => agent.role === "CUSTOMER");
+			const customers = agents.filter(
+				(agent: agent) => agent.role === "CUSTOMER"
+			);
 			setNumberOfCustomers(customers.length);
 		}
 		if (user && user.role === "AGENT" && user.id) {

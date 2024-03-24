@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import BackButton from "../../shared/BackButton";
 import useFetchData from "../../Hooks/useFetchData";
 import React, { useState } from "react";
@@ -8,7 +8,6 @@ import PaymentModal from "./PaymentModel";
 function CustomerOrderDetails() {
 	const [open, setOpen] = useState<boolean>(false);
 	const { id } = useParams();
-	const navigate = useNavigate();
 	const { data: order } = useFetchData(`/orders/${id}`);
 	const { pathname } = useLocation();
 	const paths = pathname.split("/");

@@ -2,14 +2,19 @@ import { useForm } from "react-hook-form";
 import { HashLoader } from "react-spinners";
 import usePostData from "../../Hooks/usePostData";
 import BackButton from "../../shared/BackButton";
-import { agent, siteI } from "../../shared/types";
+import { district, province, sector, siteI } from "../../shared/types";
 import useFetchData from "../../Hooks/useFetchData";
 
+interface dataForm {
+	name: string;
+	description: string;
+	price: number;
+	sector: number;
+	province: number;
+	district: number;
+}
 function CreateLocation() {
-	const { register, handleSubmit, reset, watch } = useForm();
-	const province = watch("province") || "";
-	const district = watch("district") || "";
-	const sector = watch("sector") || "";
+	const { register, handleSubmit, reset } = useForm<dataForm>();
 
 	const { postData, isLoading } = usePostData();
 	const { data: provinces } = useFetchData("/site/address/province");
@@ -20,9 +25,9 @@ function CreateLocation() {
 	// console.log("districts", districts);
 	// console.log("sectors", sectors);
 
-	const createSite = async (data) => {
+	const createSite = async (data: dataForm) => {
 		const { sector, name, price, description }: siteI = data;
-		await postData("/site", { sector, name, description });
+		await postData("/site", { sector, name, price, description });
 		reset();
 	};
 	return (
@@ -47,7 +52,7 @@ function CreateLocation() {
 							<option value="">select province</option>
 							{provinces &&
 								provinces.length > 0 &&
-								provinces.map((province) => (
+								provinces.map((province: province) => (
 									<option value={province.id}>{province.name}</option>
 								))}
 						</select>
@@ -64,7 +69,7 @@ function CreateLocation() {
 							<option value="">select district</option>
 							{districts &&
 								districts.length > 0 &&
-								districts.map((district) => (
+								districts.map((district: district) => (
 									<option value={district.id}>{district.name}</option>
 								))}
 						</select>
@@ -82,7 +87,7 @@ function CreateLocation() {
 							<option value=""></option>
 							{sectors &&
 								sectors.length > 0 &&
-								sectors.map((sector) => (
+								sectors.map((sector: sector) => (
 									<option value={sector.id}>{sector.name}</option>
 								))}
 						</select>

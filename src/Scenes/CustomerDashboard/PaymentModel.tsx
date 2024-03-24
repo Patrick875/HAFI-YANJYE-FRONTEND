@@ -27,7 +27,7 @@ function PaymentModal({ open, setOpen }: PaymentModalProps) {
 							<div className="block mb-2">
 								<Label htmlFor="methods" value="Select Payment Method" />
 							</div>
-							<Select {...register("paymentmethod")} required>
+							<Select {...register("paymentMethod")} required>
 								<option value="mobile money">Mobile Money</option>
 								{/* {<option value='visacard'></option>} */}
 							</Select>

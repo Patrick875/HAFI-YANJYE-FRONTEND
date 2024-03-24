@@ -138,7 +138,7 @@ function AgentDetails() {
 											{el.orderDetails &&
 												el.orderDetails.map((prod: OrderItem) => (
 													<p key={prod.id} className="text-xs">
-														{prod.product.name}
+														{prod && prod.product ? prod.product.name : ""}
 													</p>
 												))}
 										</div>

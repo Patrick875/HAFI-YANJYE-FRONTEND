@@ -58,7 +58,7 @@ function CreateCoupon() {
 	const initialCode: string = randomStringGenerator();
 
 	const [code, setCode] = useState<string>(initialCode);
-	const updateCode = (e) => {
+	const updateCode = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setCode(e.target.value);
 	};
 

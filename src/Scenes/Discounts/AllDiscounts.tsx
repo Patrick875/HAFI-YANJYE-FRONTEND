@@ -2,7 +2,6 @@ import { HiMagnifyingGlass } from "react-icons/hi2";
 import CreateButton from "../../shared/CreateButton";
 import { useForm } from "react-hook-form";
 import useFetchData from "../../Hooks/useFetchData";
-import { isDatePast } from "../../shared/constants";
 import { IDiscount } from "../../shared/types";
 import DiscountTile from "./DiscountTile";
 

@@ -167,16 +167,20 @@ export interface siteFull {
     name: string;
     description: string;
     price?: number;
-    sector: {
-        id: number;
-        name: string;
-        district: {
-            id: number;
-            name: string;
-            province: {
-                id: number;
-                name: string;
-            }
-        }
-    }
+    sector: sector;
+}
+
+export interface province {
+    id: number;
+    name: string;
+}
+export interface district {
+    id: number;
+    name: string;
+    province: province
+}
+export interface sector {
+    id: number;
+    name: string;
+    district: district;
 }

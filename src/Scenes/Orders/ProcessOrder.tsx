@@ -134,7 +134,7 @@ function ProcessOrder() {
 					order &&
 					order.orderDetails
 						.filter((det: OrderItem) => el.items.includes(det.id))
-						.map((el: OrderItem) => el.product.name),
+						.map((el: OrderItem) => (el.product ? el.product.name : "")),
 			}));
 
 		return (
@@ -274,10 +274,14 @@ function ProcessOrder() {
 													)
 												) : null}
 
-												<p className="text-xs">{det.product.name}</p>
+												<p className="text-xs">
+													{det.product ? det.product.name : ""}
+												</p>
 											</div>
 											<p className="text-xs">{det.quantity}</p>
-											<p className="text-xs">{det.product.price}</p>
+											<p className="text-xs">
+												{det.product ? det.product.price : ""}
+											</p>
 										</div>
 									))}
 							</div>

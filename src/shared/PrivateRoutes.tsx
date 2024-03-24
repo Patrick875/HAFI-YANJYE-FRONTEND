@@ -3,9 +3,9 @@ import { Navigate } from "react-router-dom";
 import { getUser } from "../store";
 import { useSelector } from "react-redux";
 
-interface privateRoutesProps {
-	allowedPositions?: string[];
-}
+// interface privateRoutesProps {
+// 	allowedPositions?: string[];
+// }
 export const PrivateRoutes = () => {
 	const user = useSelector(getUser);
 	console.log("user", user);

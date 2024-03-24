@@ -1,8 +1,8 @@
-import { OrderItem } from "../../shared/types";
+import { OrderItem, order } from "../../shared/types";
 import { useOutletContext } from "react-router-dom";
 
 function AssignedItemsTab() {
-	const order = useOutletContext();
+	const order: order = useOutletContext();
 
 	return (
 		<div>
@@ -24,19 +24,21 @@ function AssignedItemsTab() {
 						order.orderDetails.map((details: OrderItem) => (
 							<div key={details.id} className="grid w-full grid-cols-5 ">
 								<div className="p-3 py-2 text-xs font-semibold text-le ">
-									{details.product.name}
+									{details.product ? details.product.name : ""}
 								</div>
 								<div className="p-3 py-2 text-xs font-semibold text-le "></div>
 								<div className="p-3 py-2 text-xs font-semibold text-left ">
-									{details.product.cost}
+									{details.product ? details.product.cost : ""}
 								</div>
 								<div className="p-3 py-2 text-xs font-semibold text-left ">
 									{details.quantity}
 								</div>
 								<div className="p-3 py-2 text-xs font-semibold text-left ">
-									{Number(
-										details.product.cost * details.quantity
-									).toLocaleString("fr-FR")}
+									{details.product
+										? Number(
+												details.product.cost * details.quantity
+										  ).toLocaleString("fr-FR")
+										: ""}
 								</div>
 							</div>
 						))}

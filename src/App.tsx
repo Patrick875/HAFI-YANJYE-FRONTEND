@@ -20,7 +20,7 @@ import BulkCreateProducts from "./Scenes/Products/BulkCreateProducts";
 import AllCategories from "./Scenes/Categories/AllCategories";
 import CreateCategory from "./Scenes/Categories/CreateCategory";
 import Page404 from "./Scenes/ErrorPages/Page404";
-import { PrivateRoutes } from "./shared/PrivateRoutes";
+// import { PrivateRoutes } from "./shared/PrivateRoutes";
 import AllDiscounts from "./Scenes/Discounts/AllDiscounts";
 import DiscCoupLayout from "./Scenes/Discounts/DiscCoupLayout";
 import AllCoupons from "./Scenes/Discounts/AllCoupons";

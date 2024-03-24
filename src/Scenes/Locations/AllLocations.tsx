@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import useFetchData from "../../Hooks/useFetchData";
-import { siteFull, siteI } from "../../shared/types";
+import { siteFull } from "../../shared/types";
 
 function AllLocations() {
 	const { data: sites } = useFetchData("/site");
