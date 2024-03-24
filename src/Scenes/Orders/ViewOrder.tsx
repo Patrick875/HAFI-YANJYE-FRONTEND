@@ -18,7 +18,8 @@ function ViewOrder() {
 	const total: number | null =
 		order && order.orderDetails
 			? order.orderDetails.reduce((acc: number, ord: OrderItem) => {
-					const prod = Number(ord.product.cost * ord.quantity);
+					const prod = ord.product ? ord.product.cost * ord.quantity : 0;
+
 					return acc + prod;
 			  }, 0)
 			: null;
@@ -45,6 +46,7 @@ function ViewOrder() {
 				}
 			});
 	};
+	console.log("order", order);
 
 	return (
 		<div>
@@ -126,19 +128,21 @@ function ViewOrder() {
 							order.orderDetails.map((details: OrderItem) => (
 								<div className="grid w-full grid-cols-5 ">
 									<div className="p-3 py-2 text-xs font-semibold text-le ">
-										{details.product.name}
+										{details.product ? details.product.name : ""}
 									</div>
 									<div className="p-3 py-2 text-xs font-semibold text-le "></div>
 									<div className="p-3 py-2 text-xs font-semibold text-left ">
-										{details.product.cost}
+										{details.product ? details.product.cost : ""}
 									</div>
 									<div className="p-3 py-2 text-xs font-semibold text-left ">
-										{details.quantity}
+										{details.quantity ? details.quantity : ""}
 									</div>
 									<div className="p-3 py-2 text-xs font-semibold text-left ">
-										{Number(
-											details.product.cost * details.quantity
-										).toLocaleString("fr-FR")}
+										{details.product
+											? Number(
+													details.product.cost * details.quantity
+											  ).toLocaleString("fr-FR")
+											: ""}
 									</div>
 								</div>
 							))}

@@ -8,6 +8,8 @@ import { OrderItem, order } from "../../shared/types";
 function AgentDetails() {
 	const { agentId } = useParams();
 	const { data: agent, loading } = useFetchData(`users/${agentId}`);
+	console.log("agent", agent);
+
 	const { register } = useForm();
 
 	return (
@@ -136,7 +138,7 @@ function AgentDetails() {
 											{el.orderDetails &&
 												el.orderDetails.map((prod: OrderItem) => (
 													<p key={prod.id} className="text-xs">
-														{prod.product.name}
+														{prod && prod.product ? prod.product.name : ""}
 													</p>
 												))}
 										</div>

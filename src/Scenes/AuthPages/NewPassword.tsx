@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Lock from "../../assets/images/Lock.svg";
 import { motion } from "framer-motion";
 import AuthTitle from "./AuthTitle";
@@ -9,15 +9,16 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 interface resetPasswordType {
-	email: string;
+	newPassword: string;
 }
-const ResetPassword = () => {
+const NewPassword = () => {
+	const { token } = useParams();
 	const { register, handleSubmit } = useForm<resetPasswordType>();
 	const [loading, setLoading] = useState<boolean>(false);
 	const resetPassword = async (data: resetPasswordType) => {
 		setLoading(true);
 		await instance
-			.post("/auth/reset-password", data)
+			.post(`/auth/update-password/${token}`, data)
 			.then((res) => {
 				toast.success(res.data.message);
 			})
@@ -42,9 +43,9 @@ const ResetPassword = () => {
 			<form onSubmit={handleSubmit(resetPassword)} className="w-4/5 mx-auto ">
 				<input
 					className="w-full px-3 py-1 my-1 font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900"
-					type="text"
-					{...register("email")}
-					placeholder="Email"
+					type="password"
+					{...register("newPassword")}
+					placeholder="New Password"
 				/>
 
 				<button
@@ -55,7 +56,7 @@ const ResetPassword = () => {
 							: " text-yellow-700 bg-[#E4F1FE]"
 					}`}>
 					{!loading ? (
-						"Reset Password"
+						"Submit"
 					) : (
 						<HashLoader color="#0C4981" loading={loading} size={15} />
 					)}
@@ -68,4 +69,4 @@ const ResetPassword = () => {
 	);
 };
 
-export default ResetPassword;
+export default NewPassword;

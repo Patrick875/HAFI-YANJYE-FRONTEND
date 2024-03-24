@@ -67,7 +67,7 @@ export interface customer {
 
 export type OrderItem = {
     id: number;
-    product: {
+    product?: {
         id: number;
         name: string;
         description: string;
@@ -84,9 +84,11 @@ export interface agent {
     id: number;
     password?: string;
     role: string;
-    telphone: string;
+    telephone: string;
     tinNumber: string | null;
     location?: string;
+    orderProcessor: [];
+    orders?: order[];
 }
 export interface identityPerson {
     fullName: string;
@@ -101,4 +103,84 @@ export interface category {
     id: number;
     images: image[]
     products?: product[]
+}
+
+
+export interface IDiscount {
+    id: number;
+    startAt: Date;
+    endAt: Date;
+    rate: number;
+    code: string;
+    type: DiscountType;
+    products?: product[];
+    categories?: category[];
+}
+
+export enum DiscountType {
+    ALL_PRODUCTS = 'ALL_PRODUCTS',
+    CATEGORIES = 'CATEGORIES',
+    PRODUCTS = "PRODUCTS"
+}
+export interface ICoupon {
+    id?: number;
+    code: string;
+    startAt: Date;
+    endAt: Date;
+    rate: number;
+    minItems: number;
+    timeUsage?: number;
+    minCost: number;
+    products?: product[];
+    order?: order
+}
+
+export interface OrderProcessI {
+    id: number;
+    orderItemId: number;
+    agentId: number;
+    processStatus: string;
+    orderItem: {
+        id: number;
+        quantity: number;
+        pricePerItem: number;
+        order: {
+            id: number;
+            orderId: string;
+            orderDate: string;
+            total: number;
+            status: OrderStatus;
+        }
+    }
+
+}
+
+export interface siteI {
+    name: string;
+    description: string;
+    sector: number;
+    price: number;
+}
+
+export interface siteFull {
+    id: number;
+    name: string;
+    description: string;
+    price?: number;
+    sector: sector;
+}
+
+export interface province {
+    id: number;
+    name: string;
+}
+export interface district {
+    id: number;
+    name: string;
+    province: province
+}
+export interface sector {
+    id: number;
+    name: string;
+    district: district;
 }

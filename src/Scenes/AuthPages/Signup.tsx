@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 interface signupType {
 	fullName: string;
 	email: string;
-	telphone: string;
+	telephone: string;
 	password: string;
 	confirmPassword: string;
 }
@@ -62,7 +62,7 @@ const Signup = () => {
 					className="w-full px-3 py-1 my-3 font-light border border-gray-300 rounded-md placeholder:text-xs placeholder:italic focus-outline:none focus:outline-none focus:border-gray-700 focus:ring-1 focus:ring-gray-900"
 					type="text"
 					placeholder="Telephone"
-					{...register("telphone")}
+					{...register("telephone")}
 				/>
 
 				<input

@@ -47,7 +47,7 @@ function RegisterAgent() {
 							type="text"
 							required
 							placeholder="Telephone"
-							{...register("telphone")}
+							{...register("telephone")}
 						/>
 					</div>
 					<div>

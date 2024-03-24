@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 import useFetchData from "../../Hooks/useFetchData";
 import { OrderItem, agent, identityPerson } from "../../shared/types";
 import instance from "../../API";
+import { toast } from "react-hot-toast";
 
 interface orderAssign {
 	agentId: number;
@@ -133,7 +134,7 @@ function ProcessOrder() {
 					order &&
 					order.orderDetails
 						.filter((det: OrderItem) => el.items.includes(det.id))
-						.map((el: OrderItem) => el.product.name),
+						.map((el: OrderItem) => (el.product ? el.product.name : "")),
 			}));
 
 		return (
@@ -168,8 +169,6 @@ function ProcessOrder() {
 	};
 
 	const assignAgents = async () => {
-		console.log("assignment", assignedAgents);
-
 		const submitData = assignedAgents
 			.map((el) =>
 				el.items.length !== 0
@@ -180,17 +179,17 @@ function ProcessOrder() {
 					: null
 			)
 			.filter((el) => (el ? el : null));
-		console.log("submit-data", submitData);
 
 		await instance
 			.post("/orders/assign/agent", {
 				agentId: submitData[0]?.agentId,
 				orderItems: submitData[0]?.orderItems,
 			})
-			.then((res) => {
-				console.log("res", res);
+			.then(() => {
+				toast.success("success !!!!");
 			})
 			.catch((err) => {
+				toast.error(err.code);
 				console.log("errr", err);
 			});
 	};
@@ -275,10 +274,14 @@ function ProcessOrder() {
 													)
 												) : null}
 
-												<p className="text-xs">{det.product.name}</p>
+												<p className="text-xs">
+													{det.product ? det.product.name : ""}
+												</p>
 											</div>
 											<p className="text-xs">{det.quantity}</p>
-											<p className="text-xs">{det.product.price}</p>
+											<p className="text-xs">
+												{det.product ? det.product.price : ""}
+											</p>
 										</div>
 									))}
 							</div>
@@ -301,7 +304,7 @@ function ProcessOrder() {
 														: " "
 												} mb-2  w-full cursor-pointer  p-2 rounded-[6px] bg-slate-100`}>
 												<p className="text-xs font-medium">{agent.fullName}</p>
-												<p className="text-xs">{agent.telphone}</p>
+												<p className="text-xs">{agent.telephone}</p>
 												<p className="text-xs">{agent.location}</p>
 											</div>
 										))}

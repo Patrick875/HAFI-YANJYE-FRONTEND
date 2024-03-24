@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-function Locations() {
+function CustomerOrders() {
 	return (
 		<>
 			<Outlet />
@@ -8,4 +8,4 @@ function Locations() {
 	);
 }
 
-export default Locations;
+export default CustomerOrders;

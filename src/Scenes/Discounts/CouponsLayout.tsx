@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-function Locations() {
+function CouponsLayout() {
 	return (
 		<>
 			<Outlet />
@@ -8,4 +8,4 @@ function Locations() {
 	);
 }
 
-export default Locations;
+export default CouponsLayout;

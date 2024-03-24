@@ -18,6 +18,8 @@ function AllAgentOrders() {
 	const navigate = useNavigate();
 	const { data: orders, loading } = useFetchData("/orders");
 
+	console.log("orders", orders);
+
 	const TableHead = (): ReactElement => (
 		<div className="bg-white">
 			<div className="grid grid-flow-col grid-cols-12">

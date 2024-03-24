@@ -53,7 +53,6 @@ const Login = () => {
 			})
 			.finally(() => {
 				setLoading(false);
-				navigate("/admin");
 			});
 	};
 	return (

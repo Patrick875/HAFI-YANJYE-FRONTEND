@@ -47,7 +47,7 @@ function AllAgents() {
 							className="grid grid-cols-4 p-4 bg-white cursor-pointer">
 							<p className="p-1 text-xs ">{agent.fullName}</p>
 							<p className="p-1 text-xs "></p>
-							<p className="p-1 text-xs ">{agent.telphone}</p>
+							<p className="p-1 text-xs ">{agent.telephone}</p>
 							<p className="p-1 text-xs "></p>
 						</div>
 					))}
