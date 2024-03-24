@@ -53,6 +53,7 @@ const TopNavDropdown = () => {
 };
 
 const TopBar = () => {
+	const user = useSelector(getUser);
 	const { pathname } = useLocation();
 	const tab: string = pathname.split("/")[2];
 	const { register } = useForm();
@@ -62,14 +63,17 @@ const TopBar = () => {
 			{tab ? (
 				<p className="text-sm font-bold capitalize">{tab}</p>
 			) : (
-				<form className="flex border-2 border-[#8A8A8A] items-center gap-3 p-1 px-4 bg-search-bg rounded-[8px] ">
-					<HiMagnifyingGlass className="w-3 h-3 text-login-blue" />
-					<input
-						placeholder="Search"
-						className="text-xs bg-transparent focus:outline-none focus-border-none placeholder:text-xs placeholder:font-bold"
-						{...register("query")}
-					/>
-				</form>
+				user &&
+				user.role !== "CUSTOMER" && (
+					<form className="flex border-2 border-[#8A8A8A] items-center gap-3 p-1 px-4 bg-search-bg rounded-[8px] ">
+						<HiMagnifyingGlass className="w-3 h-3 text-login-blue" />
+						<input
+							placeholder="Search"
+							className="text-xs bg-transparent focus:outline-none focus-border-none placeholder:text-xs placeholder:font-bold"
+							{...register("query")}
+						/>
+					</form>
+				)
 			)}
 			<div className="flex gap-3 ">
 				<Link

@@ -169,8 +169,6 @@ function ProcessOrder() {
 	};
 
 	const assignAgents = async () => {
-		console.log("assignment", assignedAgents);
-
 		const submitData = assignedAgents
 			.map((el) =>
 				el.items.length !== 0
@@ -302,7 +300,7 @@ function ProcessOrder() {
 														: " "
 												} mb-2  w-full cursor-pointer  p-2 rounded-[6px] bg-slate-100`}>
 												<p className="text-xs font-medium">{agent.fullName}</p>
-												<p className="text-xs">{agent.telphone}</p>
+												<p className="text-xs">{agent.telephone}</p>
 												<p className="text-xs">{agent.location}</p>
 											</div>
 										))}

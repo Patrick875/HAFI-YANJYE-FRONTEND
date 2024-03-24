@@ -1,13 +1,12 @@
-import { ReactElement } from "react";
+// import { ReactElement } from "react";
 import { Navigate } from "react-router-dom";
 import { getUser } from "../store";
 import { useSelector } from "react-redux";
 
 interface privateRoutesProps {
 	allowedPositions?: string[];
-	element: ReactElement;
 }
-export const PrivateRoutes = ({ element }: privateRoutesProps) => {
+export const PrivateRoutes = () => {
 	const user = useSelector(getUser);
 	console.log("user", user);
 
@@ -21,9 +20,9 @@ export const PrivateRoutes = ({ element }: privateRoutesProps) => {
 		} else if (user.role === "CUSTOMER") {
 			return <Navigate to={`/customer`} />;
 		} else {
+			console.log("here-bro");
+
 			return <Navigate to={`/admin`} />;
 		}
 	}
-
-	return element;
 };

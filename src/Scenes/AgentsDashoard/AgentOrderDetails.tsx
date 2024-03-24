@@ -2,8 +2,6 @@ import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../shared/BackButton";
 import useFetchData from "../../Hooks/useFetchData";
 import React from "react";
-import instance from "../../API";
-import toast from "react-hot-toast";
 
 function AgentOrderDetails() {
 	const { id } = useParams();

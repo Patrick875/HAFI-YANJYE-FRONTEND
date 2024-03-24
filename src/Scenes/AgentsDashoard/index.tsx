@@ -7,14 +7,12 @@ import { useEffect, useState } from "react";
 import instance from "../../API";
 import { CiCreditCard1 } from "react-icons/ci";
 import OrdersTableHeader from "../Orders/OrdersTableHeader";
-import { OrderProcessI, order } from "../../shared/types";
+import { OrderProcessI } from "../../shared/types";
 import { formatDate } from "../../shared/constants";
 import OrderStatusComponent from "../Orders/OrderStatusComponent";
-import BackButton from "../../shared/BackButton";
 
 function AgentDashboard() {
 	const user = useSelector(getUser);
-
 	const { control } = useForm();
 	const navigate = useNavigate();
 	const [agentOrders, setAgentOrders] = useState([]);
@@ -28,8 +26,6 @@ function AgentDashboard() {
 				console.log("err", err);
 			});
 	};
-
-	console.log("agent-orders", agentOrders);
 
 	useEffect(() => {
 		if (user && user.role === "AGENT" && user.id) {

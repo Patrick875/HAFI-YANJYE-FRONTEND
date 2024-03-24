@@ -8,6 +8,8 @@ import { agentNavs, customerNavs, navlinks } from "../../shared/constants";
 
 const LogedInLayout = () => {
 	const user = useSelector(getUser);
+	console.log("is logged in");
+
 	const role: string = "ADMIN";
 	const navs: navitem[] =
 		role === "ADMIN"

@@ -84,7 +84,7 @@ export interface agent {
     id: number;
     password?: string;
     role: string;
-    telphone: string;
+    telephone: string;
     tinNumber: string | null;
     location?: string;
     orderProcessor: [];
@@ -155,3 +155,28 @@ export interface OrderProcessI {
 
 }
 
+export interface siteI {
+    name: string;
+    description: string;
+    sector: number;
+    price: number;
+}
+
+export interface siteFull {
+    id: number;
+    name: string;
+    description: string;
+    price?: number;
+    sector: {
+        id: number;
+        name: string;
+        district: {
+            id: number;
+            name: string;
+            province: {
+                id: number;
+                name: string;
+            }
+        }
+    }
+}

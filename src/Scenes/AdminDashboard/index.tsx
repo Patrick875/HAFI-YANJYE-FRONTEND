@@ -18,7 +18,6 @@ import instance from "../../API";
 
 const AdminDashboard = () => {
 	const user = useSelector(getUser);
-
 	const { control } = useForm();
 	const navigate = useNavigate();
 	const { data: orders, loading } = useFetchData("/orders");

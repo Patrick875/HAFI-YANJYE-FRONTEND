@@ -1,17 +1,17 @@
+import { ReactElement, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { OrderItem } from "../../shared/types";
-import { useState } from "react";
 import toast from "react-hot-toast";
 import instance from "../../API";
 
-function AgentOrderProcess() {
+function AgentOrderProcess(): ReactElement {
 	const order = useOutletContext();
 	const [itemsChecked, setItemsChecked] = useState<number[]>([]);
-	const updateOrderStatus = async () => {
+	const markItemAsDone = async (itemId: number) => {
 		await instance
-			.patch(`/orders/${order.id}`, { status: "CONFIRMED" })
+			.patch(`/orders/item/done/${itemId}`)
 			.then(() => {
-				toast.success("Order updated !!!!");
+				toast.success("success !!!");
 			})
 			.catch((err) => {
 				console.log("err", err);
@@ -22,10 +22,10 @@ function AgentOrderProcess() {
 	return (
 		order && (
 			<div>
-				<p className="mt-4 text-xl font-bold text-center"> Items Checklist </p>
+				<p className="mt-4 font-bold text-center"> Items Checklist </p>
 
 				<div className="relative">
-					<p className="sticky top-0 text-lg font-bold">
+					<p className="sticky top-0 text-sm font-bold">
 						Items Checked {itemsChecked.length} / {order.orderDetails.length}{" "}
 					</p>
 
@@ -33,43 +33,24 @@ function AgentOrderProcess() {
 						order.orderDetails &&
 						order.orderDetails.map((item: OrderItem) => (
 							<div className="bg-white  flex items-center justify-between  rounded-[8px] p-4">
-								<div className="grid grid-cols-5 gap-5 ">
-									<p className="py-1">{item.product?.name}</p>
-									<p className="py-1">Requested Quantity:{item.quantity}</p>
+								<div className="grid flex-1 grid-cols-3 gap-5 ">
+									<p className="py-1 font-bold">{item.product?.name}</p>
+									<p className="py-1">Requested Quantity : {item.quantity}</p>
 									<p className="py-1">
-										Product cost:{item.product?.cost.toLocaleString()}
+										Product cost : {item.product?.cost.toLocaleString()}
 									</p>
-
-									{/* {<p className="py-1">list of suppliers for the product</p>} */}
 								</div>
-								<div>
+								<div className="flex justify-center ">
 									<button
 										onClick={() => {
-											if (!itemsChecked.includes(item.id)) {
-												setItemsChecked((prev) => [...prev, item.id]);
-											}
+											markItemAsDone(item.id);
 										}}
-										className="px-6 py-1 font-bold text-white rounded-md bg-sky-800">
-										{itemsChecked.includes(item.id)
-											? "Collected"
-											: "Mark as Collected"}
+										className="px-2 py-1 text-xs font-bold text-white rounded-md bg-sky-800">
+										{itemsChecked.includes(item.id) ? "Done" : "Mark as done"}
 									</button>
 								</div>
-								<div></div>
 							</div>
 						))}
-					<div className="mt-3">
-						<button
-							onClick={updateOrderStatus}
-							disabled={itemsChecked.length < order.orderDetails.length}
-							className={`w-full py-1 rounded-[8px]  ${
-								itemsChecked.length !== order.orderDetails.length
-									? "text-gray-300 bg-pink-900 "
-									: " text-white bg-emerald-800 "
-							}  font-bold `}>
-							Mark order as processed
-						</button>
-					</div>
 				</div>
 			</div>
 		)

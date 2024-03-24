@@ -8,7 +8,7 @@ import { CiUser } from "react-icons/ci";
 import CryptoJS from "crypto-js";
 import { navitem } from "./types";
 import { IoAnalytics } from "react-icons/io5";
-export const serverUrl: string = "https://hafiyanjyev1-1hbfokff.b4a.run/";
+export const serverUrl: string = "http://108.181.195.65:5000";
 //export const serverUrl: string = "https://hafi-yanjye-api.onrender.com/";
 export const localServer: string = "http://localhost:3000/";
 export const testingUrl: string = "https://dummyjson.com/";
@@ -58,7 +58,7 @@ export const navlinks: navitem[] = [
 		location: "suppliers",
 	},
 	{
-		page: "Collecation locations",
+		page: "Collecation sites",
 		link: "locations",
 		icon: <CiMap />,
 		location: "locations",
@@ -79,16 +79,10 @@ export const customerNavs: navitem[] = [
 		location: "admin",
 	},
 	{
-		page: "Orders",
+		page: "All Orders",
 		link: "orders",
 		icon: <PiNotepadThin />,
 		location: "orders",
-	},
-	{
-		page: "Analytics",
-		link: "analytics",
-		icon: <IoAnalytics />,
-		location: "analytics",
 	},
 ];
 
@@ -112,10 +106,44 @@ export const agentNavs: navitem[] = [
 		location: "analytics",
 	},
 	{
-		page: "Collecation locations",
+		page: "Collecation sites",
 		link: "locations",
 		icon: <CiMap />,
 		location: "locations",
+	},
+];
+export const DriverNavs: navitem[] = [
+	{
+		page: "Dashboard",
+		link: "",
+		icon: <LuLayoutDashboard />,
+		location: "admin",
+	},
+	{
+		page: "Orders",
+		link: "orders",
+		icon: <PiNotepadThin />,
+		location: "orders",
+	},
+];
+export const FinanceNavs: navitem[] = [
+	{
+		page: "Dashboard",
+		link: "",
+		icon: <LuLayoutDashboard />,
+		location: "admin",
+	},
+	{
+		page: "Sales",
+		link: "sales",
+		icon: <PiNotepadThin />,
+		location: "sales",
+	},
+	{
+		page: "Reports",
+		link: "reports",
+		icon: <PiNotepadThin />,
+		location: "reports",
 	},
 ];
 

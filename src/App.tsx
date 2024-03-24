@@ -4,7 +4,7 @@ import AuthLayout from "./Scenes/AuthPages";
 import ResetPassword from "./Scenes/AuthPages/ResetPassword";
 import Signup from "./Scenes/AuthPages/Signup";
 import Login from "./Scenes/AuthPages/Login";
-import { AnimatePresence } from "framer-motion";
+// import { AnimatePresence } from "framer-motion";
 import LogedInLayout from "./Scenes/LogedInShared/LogedInLayout";
 import AdminDashboard from "./Scenes/AdminDashboard";
 import Products from "./Scenes/Products";
@@ -45,32 +45,39 @@ import AgentLayout from "./Scenes/AgentsDashoard/AgentLayout";
 import AgentDashboard from "./Scenes/AgentsDashoard";
 import AgentOrders from "./Scenes/AgentsDashoard/AgentOrders";
 import AllAgentOrders from "./Scenes/AgentsDashoard/AllAgentOrders";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+// import { GoogleOAuthProvider } from "@react-oauth/google";
 import CouponsLayout from "./Scenes/Discounts/CouponsLayout";
 import AssignedItemsTab from "./Scenes/AgentsDashoard/AssignedItemsTab";
 import AgentOrderProcess from "./Scenes/AgentsDashoard/AgentOrderProcess";
+import CustomerLayout from "./Scenes/CustomerDashboard";
+import CustomerDashboard from "./Scenes/CustomerDashboard/CustomerDashboard";
+import CustomerOrders from "./Scenes/CustomerDashboard/CustomerOrders";
+import AllCustomerOrders from "./Scenes/CustomerDashboard/AllCustomerOrders";
+import CustomerOrderDetails from "./Scenes/CustomerDashboard/CustomerOrderDetails";
+import DriverLayout from "./Scenes/DriverDashboard";
+import DriverDashboard from "./Scenes/DriverDashboard/DriverDashboard";
+import DriverOrders from "./Scenes/DriverDashboard/DriverOrders";
+import AllDriverOrders from "./Scenes/DriverDashboard/AllDriverOrders";
+import DriverOrderDetails from "./Scenes/DriverDashboard/DriverOrderDetails";
+import FinanceUserLayout from "./Scenes/Finance";
+import FinanceUserDashboard from "./Scenes/Finance/FinanceUserDashboard";
+import NewPassword from "./Scenes/AuthPages/NewPassword";
+import AllLocations from "./Scenes/Locations/AllLocations";
+import CreateLocation from "./Scenes/Locations/CreateLocation";
 
 function App() {
 	return (
 		<>
-			<AnimatePresence>
+			<>
 				<Toaster position="top-center" toastOptions={{ duration: 5000 }} />
 				<Routes>
 					<Route path="/" element={<AuthLayout />}>
-						<Route
-							index
-							element={
-								<GoogleOAuthProvider clientId="789303875610-cuhkfvk71qohmmijih1d6tmp1dtdlsk1.apps.googleusercontent.com">
-									<Login />
-								</GoogleOAuthProvider>
-							}
-						/>
+						<Route index element={<Login />} />
 						<Route path="register" element={<Signup />} />
 						<Route path="reset-password" element={<ResetPassword />} />
+						<Route path="/password/reset/:token" element={<NewPassword />} />
 					</Route>
-					<Route
-						path="/admin"
-						element={<PrivateRoutes element={<LogedInLayout />} />}>
+					<Route path="/admin" element={<LogedInLayout />}>
 						<Route index element={<AdminDashboard />} />
 						<Route path="products" element={<Products />}>
 							<Route index element={<AllProducts />} />
@@ -108,10 +115,12 @@ function App() {
 							<Route path="create" element={<RegisterSupplier />} />
 							<Route path=":supplierId" element={<SupplierDetails />} />
 						</Route>
-						<Route path="locations" element={<Locations />} />
+						<Route path="locations" element={<Locations />}>
+							<Route index element={<AllLocations />} />
+							<Route path="create" element={<CreateLocation />} />
+						</Route>
 						<Route path="analytics" element={<Analytics />} />
 					</Route>
-
 					<Route path="/agent" element={<AgentLayout />}>
 						<Route index element={<AgentDashboard />} />
 						<Route path="orders" element={<AgentOrders />}>
@@ -122,11 +131,43 @@ function App() {
 							</Route>
 						</Route>
 					</Route>
+					<Route path="/customer" element={<CustomerLayout />}>
+						<Route index element={<CustomerDashboard />} />
+						<Route path="orders" element={<CustomerOrders />}>
+							<Route index element={<AllCustomerOrders />} />
+							<Route path=":id" element={<CustomerOrderDetails />} />
+						</Route>
+					</Route>
+					<Route path="/driver" element={<DriverLayout />}>
+						<Route index element={<DriverDashboard />} />
+						<Route path="orders" element={<DriverOrders />}>
+							<Route index element={<AllDriverOrders />} />
+							<Route path=":id" element={<DriverOrderDetails />} />
+						</Route>
+					</Route>
+					<Route path="/finance" element={<FinanceUserLayout />}>
+						<Route index element={<FinanceUserDashboard />} />
+						<Route path="orders" element={<AgentOrders />}>
+							<Route index element={<AllAgentOrders />} />
+							<Route path=":id" element={<AgentOrderDetails />}>
+								<Route index element={<AssignedItemsTab />} />
+								<Route path="process" element={<AgentOrderProcess />} />
+							</Route>
+						</Route>
+					</Route>
 					<Route path="*" element={<Page404 />} />
 				</Routes>
-			</AnimatePresence>
+			</>
 		</>
 	);
 }
 
 export default App;
+
+// {
+// 	<GoogleOAuthProvider clientId="789303875610-cuhkfvk71qohmmijih1d6tmp1dtdlsk1.apps.googleusercontent.com">
+// <Login />
+// 	</GoogleOAuthProvider>;
+// }
+
+// element={<PrivateRoutes />}

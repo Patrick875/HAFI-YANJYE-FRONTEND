@@ -1,9 +1,9 @@
 import { user } from '../shared/types';
-import { decryptAndRetrieveToken, encryptTokenAndStoreToLocalStorage, localServer, serverUrl } from './../shared/constants';
+import { decryptAndRetrieveToken, encryptTokenAndStoreToLocalStorage, serverUrl } from './../shared/constants';
 import axios from 'axios'
 
 const instance = axios.create({
-    baseURL: localServer
+    baseURL: serverUrl
 })
 
 

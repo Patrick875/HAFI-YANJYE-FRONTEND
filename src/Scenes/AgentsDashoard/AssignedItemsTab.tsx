@@ -22,7 +22,7 @@ function AssignedItemsTab() {
 				<div className="mt-2 bg-white">
 					{order.orderDetails &&
 						order.orderDetails.map((details: OrderItem) => (
-							<div className="grid w-full grid-cols-5 ">
+							<div key={details.id} className="grid w-full grid-cols-5 ">
 								<div className="p-3 py-2 text-xs font-semibold text-le ">
 									{details.product.name}
 								</div>
